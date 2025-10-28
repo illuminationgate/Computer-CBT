@@ -10,12 +10,10 @@ interface TimerProps {
 
 export function Timer({ startTime, duration, onTimeUp, isPaused = false }: TimerProps) {
   const onTimeUpRef = useRef(onTimeUp);
-  const [timeRemaining, setTimeRemaining] = useState(() => {
+  const [timeElapsed, setTimeElapsed] = useState(() => {
     const start = new Date(startTime).getTime();
     const now = Date.now();
-    const elapsed = Math.floor((now - start) / 1000); // seconds elapsed
-    const total = duration * 60; // total duration in seconds
-    return Math.max(0, total - elapsed);
+    return Math.floor((now - start) / 1000); // seconds elapsed
   });
 
   // Update ref when callback changes
@@ -31,11 +29,11 @@ export function Timer({ startTime, duration, onTimeUp, isPaused = false }: Timer
       const now = Date.now();
       const elapsed = Math.floor((now - start) / 1000);
       const total = duration * 60;
-      const remaining = Math.max(0, total - elapsed);
       
-      setTimeRemaining(remaining);
+      setTimeElapsed(elapsed);
 
-      if (remaining <= 0) {
+      // Auto-submit when time is up
+      if (elapsed >= total) {
         clearInterval(interval);
         onTimeUpRef.current();
       }
@@ -44,14 +42,17 @@ export function Timer({ startTime, duration, onTimeUp, isPaused = false }: Timer
     return () => clearInterval(interval);
   }, [startTime, duration, isPaused]);
 
-  const minutes = Math.floor(timeRemaining / 60);
-  const seconds = timeRemaining % 60;
+  const minutes = Math.floor(timeElapsed / 60);
+  const seconds = timeElapsed % 60;
   const formattedTime = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
-  // Color transitions: normal → yellow at 5min → red at 2min
+  const totalSeconds = duration * 60;
+  const timeRemaining = totalSeconds - timeElapsed;
+
+  // Color transitions: normal → yellow at 5min remaining → red at 2min remaining
   const getColorClass = () => {
-    if (timeRemaining <= 120) return "text-destructive"; // Red at 2 minutes
-    if (timeRemaining <= 300) return "text-[hsl(38,95%,50%)]"; // Yellow at 5 minutes
+    if (timeRemaining <= 120) return "text-destructive"; // Red at 2 minutes remaining
+    if (timeRemaining <= 300) return "text-[hsl(38,95%,50%)]"; // Yellow at 5 minutes remaining
     return "text-foreground";
   };
 
