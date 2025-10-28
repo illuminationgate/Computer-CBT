@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import preloaderVideoPath from "@assets/preloader page_1760791531271.mp4";
+import preloaderVideoPath from "@assets/preloader_1761649960015.mp4";
 
 interface VideoPreloaderProps {
   onComplete: () => void;

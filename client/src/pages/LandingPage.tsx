@@ -24,6 +24,7 @@ import {
 import { Card } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useToast } from "@/hooks/use-toast";
+import logoPath from "@assets/logo_1761650011103.png";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -92,7 +93,15 @@ export default function LandingPage() {
       </div>
       
       <div className="w-full max-w-md mx-auto space-y-6">
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-4">
+          <div className="flex justify-center">
+            <img 
+              src={logoPath} 
+              alt="ComputCBT Logo" 
+              className="h-24 w-auto"
+              data-testid="img-logo"
+            />
+          </div>
           <h1 className="text-4xl md:text-5xl font-bold text-foreground" data-testid="text-title">
             ComputCBT
           </h1>

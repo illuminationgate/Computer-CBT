@@ -10,6 +10,7 @@ import { PreCheckModal } from "@/components/PreCheckModal";
 import { ChevronLeft, ChevronRight, Grid3x3, WifiOff, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import logoPath from "@assets/logo_1761650011103.png";
 
 interface Question {
   id: string;
@@ -278,6 +279,18 @@ export default function ExamInterface() {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-30 bg-card border-b h-16 px-4 md:px-6 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-2 md:gap-3 min-w-0">
+          <img 
+            src={logoPath} 
+            alt="ComputCBT" 
+            className="h-8 md:h-10 w-auto flex-shrink-0"
+            data-testid="img-logo"
+          />
+          <span className="text-xs md:text-sm font-medium truncate" data-testid="text-subject">
+            {session.subjectName}
+          </span>
+        </div>
+
         {session.startTime && <Timer startTime={session.startTime} duration={session.duration} onTimeUp={handleTimeUp} />}
         
         <div className="flex items-center gap-4">
@@ -297,10 +310,6 @@ export default function ExamInterface() {
             <Grid3x3 className="h-5 w-5" />
           </Button>
         </div>
-
-        <span className="text-sm font-medium" data-testid="text-subject">
-          {session.subjectName}
-        </span>
       </header>
 
       {/* Progress bar */}
