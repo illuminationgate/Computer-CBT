@@ -226,6 +226,33 @@ export function registerRoutes(app: Express): Express {
     }
   });
 
+  // Get saved answers for a session (for session recovery)
+  app.get("/api/answers/:sessionId", async (req, res) => {
+    try {
+      const { sessionId } = req.params;
+
+      const session = await storage.getExamSession(sessionId);
+      if (!session) {
+        return res.status(404).json({ message: "Exam session not found" });
+      }
+
+      const savedAnswers = await storage.getAnswersBySession(sessionId);
+      
+      // Return answers in a format easy to consume by frontend
+      const answersMap = savedAnswers.reduce((acc, answer) => {
+        if (answer.selectedOption) {
+          acc[answer.questionId] = answer.selectedOption;
+        }
+        return acc;
+      }, {} as Record<string, string>);
+
+      res.json(answersMap);
+    } catch (error: any) {
+      console.error("Error fetching saved answers:", error);
+      res.status(500).json({ message: "Failed to fetch saved answers" });
+    }
+  });
+
   // Start the exam timer (after user confirms in pre-check modal) - idempotent
   app.post("/api/exam-session/:sessionId/start", async (req, res) => {
     try {

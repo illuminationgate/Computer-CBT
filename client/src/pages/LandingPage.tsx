@@ -68,9 +68,9 @@ export default function LandingPage() {
   const startExamMutation = useMutation({
     mutationFn: async (data: FormValues) => {
       const response = await apiRequest("POST", "/api/start-exam", data);
-      return response;
+      return response.json();
     },
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       setLocation(`/exam/${data.examSessionId}`);
     },
     onError: (error: Error) => {

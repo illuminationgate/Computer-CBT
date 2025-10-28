@@ -60,6 +60,26 @@ export default function ExamInterface() {
     enabled: !!session?.subjectId && examStarted,
   });
 
+  // Fetch saved answers for session recovery
+  const { data: savedAnswers } = useQuery<Record<string, string>>({
+    queryKey: ["/api/answers", sessionId],
+    enabled: !!sessionId && examStarted,
+  });
+
+  // Load saved answers into state when they're fetched (only once)
+  const [answersLoaded, setAnswersLoaded] = useState(false);
+  
+  useEffect(() => {
+    if (savedAnswers && Object.keys(savedAnswers).length > 0 && !answersLoaded) {
+      const answersMap = new Map<string, string>();
+      Object.entries(savedAnswers).forEach(([questionId, selectedOption]) => {
+        answersMap.set(questionId, selectedOption);
+      });
+      setSelectedAnswers(answersMap);
+      setAnswersLoaded(true);
+    }
+  }, [savedAnswers, answersLoaded]);
+
   // Autosave mutation
   const saveMutation = useMutation({
     mutationFn: async (data: { questionId: string; selectedOption: string | null }) => {
@@ -107,11 +127,13 @@ export default function ExamInterface() {
         setTabSwitchCount((prev) => {
           const newCount = prev + 1;
           if (newCount <= 3) {
-            toast({
-              variant: "destructive",
-              title: "Warning",
-              description: `Tab switch detected (${newCount}/3). Excessive switching may result in exam termination.`,
-            });
+            setTimeout(() => {
+              toast({
+                variant: "destructive",
+                title: "Warning",
+                description: `Tab switch detected (${newCount}/3). Excessive switching may result in exam termination.`,
+              });
+            }, 0);
           }
           return newCount;
         });
@@ -124,7 +146,8 @@ export default function ExamInterface() {
 
   // Autosave every 10 seconds
   useEffect(() => {
-    if (!examStarted || !questions) return;
+    // Only autosave if exam has actually started (has startTime) and questions are loaded
+    if (!session?.startTime || !questions || questions.length === 0) return;
 
     const interval = setInterval(() => {
       const currentQuestion = questions[currentQuestionIndex];
@@ -138,7 +161,7 @@ export default function ExamInterface() {
     }, 10000);
 
     return () => clearInterval(interval);
-  }, [examStarted, currentQuestionIndex, selectedAnswers, questions]);
+  }, [session?.startTime, currentQuestionIndex, selectedAnswers, questions, saveMutation]);
 
   // Save answer when moving to next/previous question
   const saveCurrentAnswer = useCallback(() => {
@@ -157,6 +180,12 @@ export default function ExamInterface() {
     if (!questions) return;
     const currentQuestion = questions[currentQuestionIndex];
     setSelectedAnswers((prev) => new Map(prev).set(currentQuestion.id, option));
+    
+    // Immediately save the answer to backend for session recovery
+    saveMutation.mutate({
+      questionId: currentQuestion.id,
+      selectedOption: option,
+    });
   };
 
   const handleNext = () => {
@@ -264,8 +293,8 @@ export default function ExamInterface() {
       .map((q) => q.questionNumber)
   );
 
-  // Show loading if we're waiting for the session to start
-  if (examStarted && !session.startTime) {
+  // Show loading if we're waiting for the session mutation to complete
+  if (startSessionMutation.isPending) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
