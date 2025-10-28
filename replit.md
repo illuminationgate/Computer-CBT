@@ -75,7 +75,30 @@ Preferred communication style: Simple, everyday language.
 **Data Seeding**:
 - Separate seed scripts for subjects and questions
 - PDF-based question import system for bulk loading exam content
-- 15 predefined subjects matching WAEC/NECO curriculum
+- JSON-based batch import system for efficient question seeding
+- Idempotent seeding with validation and duplicate prevention
+- 15 predefined subjects matching WAEC/NECO curriculum:
+  - **Seeded subjects (13 total, 660 questions = 250 existing + 410 new)**:
+    - Agriculture (50 questions) *[Existing]*
+    - Biology (50 questions) *[Existing]*
+    - Chemistry (50 questions) *[Existing]*
+    - Christian Religious Studies (50 questions) *[Existing]*
+    - Civic Education (50 questions) *[Existing]*
+    - Commerce (50 questions) *[Added: Oct 28, 2025]*
+    - Computer (50 questions) *[Added: Oct 28, 2025]*
+    - Economics (50 questions) *[Added: Oct 28, 2025]*
+    - Financial Accounting (60 questions with 5 options) *[Added: Oct 28, 2025]*
+    - Government (50 questions) *[Added: Oct 28, 2025]*
+    - Islamic Studies (50 questions) *[Added: Oct 28, 2025]*
+    - Mathematics (50 questions) *[Added: Oct 28, 2025]*
+    - Physics (50 questions) *[Added: Oct 28, 2025]*
+  - **Pending subjects**: English, Literature in English
+
+**Seeding Instructions**:
+1. Run `tsx server/seed-all-new-subjects.ts` to seed all 8 new subjects (410 questions)
+2. Seeds are idempotent - can be run multiple times safely (duplicate questions are skipped)
+3. Validation ensures question data integrity (correct array length, valid answers, non-empty text)
+4. Unique constraint on (subject_id, question_number) prevents duplicate questions
 
 ### External Dependencies
 

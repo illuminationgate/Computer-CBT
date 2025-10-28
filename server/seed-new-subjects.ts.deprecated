@@ -1,0 +1,104 @@
+import { db } from './db';
+import { subjects, questions } from '../shared/schema';
+import { eq } from 'drizzle-orm';
+
+async function seedNewSubjects() {
+  console.log('Starting to seed new subjects...');
+
+  // Define the new subjects
+  const newSubjects = [
+    { name: 'Commerce', duration: 60, questionCount: 50 },
+    { name: 'Computer', duration: 60, questionCount: 50 },
+    { name: 'Economics', duration: 60, questionCount: 50 },
+    { name: 'Financial Accounting', duration: 90, questionCount: 58 },
+    { name: 'Government', duration: 60, questionCount: 50 },
+    { name: 'Islamic Studies', duration: 60, questionCount: 50 },
+    { name: 'Mathematics', duration: 90, questionCount: 50 },
+    { name: 'Physics', duration: 90, questionCount: 50 },
+  ];
+
+  // Insert subjects
+  for (const subject of newSubjects) {
+    const existing = await db.select().from(subjects).where(eq(subjects.name, subject.name));
+    
+    if (existing.length === 0) {
+      await db.insert(subjects).values(subject);
+      console.log(`Inserted subject: ${subject.name}`);
+    } else {
+      console.log(`Subject already exists: ${subject.name}`);
+    }
+  }
+
+  // Commerce questions (50 questions, 4 options)
+  const commerceSubject = await db.select().from(subjects).where(eq(subjects.name, 'Commerce'));
+  const commerceQuestions = [
+    { question: "Commerce is defined as", optionA: "buying and selling of goods and services only.", optionB: "all activities in the distribution and exchange of goods and services.", optionC: "all activities involved in the production of goods and services.", optionD: "transporting and warehousing of goods only.", correctAnswer: "B" },
+    { question: "The types of occupation that a broker belongs to is", optionA: "commercial.", optionB: "construction.", optionC: "extraction.", optionD: "manufacturing.", correctAnswer: "A" },
+    { question: "A form of money which was not used in the early days to trade is", optionA: "tobacco.", optionB: "metal bars.", optionC: "cowries.", optionD: "coins.", correctAnswer: "D" },
+    { question: "Which of the following activities is not an example of the extractive industry?", optionA: "Weaving.", optionB: "Quarrying.", optionC: "Hunting.", optionD: "Fishing.", correctAnswer: "A" },
+    { question: "The factor of production which bear all the risk of the business is", optionA: "capital.", optionB: "entrepreneurship.", optionC: "labour.", optionD: "land.", correctAnswer: "B" },
+    { question: "Production is completed when product reach the", optionA: "warehouses.", optionB: "users.", optionC: "retailers.", optionD: "shops.", correctAnswer: "B" },
+    { question: "A partner whose name is used to boost the image of the business and does not contribute capital is a", optionA: "dormant partner.", optionB: "general partner.", optionC: "limited partner.", optionD: "nominal partner.", correctAnswer: "D" },
+    { question: "One advantage of sole proprietorship is that", optionA: "access to large capital is easy.", optionB: "decisions are made promptly.", optionC: "business risks are spread.", optionD: "continuity of business is assured.", correctAnswer: "B" },
+    { question: "A business unit in which savings of members are lent to others is a", optionA: "consumer cooperative society.", optionB: "producer cooperative society.", optionC: "credit and thrift society.", optionD: "wholesale cooperative society.", correctAnswer: "C" },
+    { question: "The document issued to a public company allowing it to commence business is the", optionA: "Article of Association.", optionB: "Certificate of Incorporation.", optionC: "Memorandum of Association.", optionD: "Certificate of Trading.", correctAnswer: "D" },
+    { question: "Which of the following is not a function of a consumer association?", optionA: "Ensuring that consumers buy quality goods", optionB: "Educating consumers on their rights", optionC: "Penalizing importers of fake goods", optionD: "Ensuring that fair prices are charged", correctAnswer: "C" },
+    { question: "An association formed by computer distributors to safeguard and promote their interest is a", optionA: "chamber of commerce.", optionB: "cooperative society.", optionC: "trade association.", optionD: "trade union.", correctAnswer: "C" },
+    { question: "The issue of prospectus by a company is an invitation to members of the public to", optionA: "subscribe to the company's shares.", optionB: "attend the company's Annual General Meeting.", optionC: "buy the company's product.", optionD: "attend the company's boards meeting.", correctAnswer: "A" },
+    { question: "Examples of current assets are", optionA: "cash and trade debtors.", optionB: "cash and trade creditors.", optionC: "trade debtors, trade creditors and cash.", optionD: "trade creditors and trade debtors.", correctAnswer: "A" },
+    { question: "When the cost of sales is divided by the average stock, the result is", optionA: "gross profit.", optionB: "net profit.", optionC: "rate of turnover.", optionD: "working capital.", correctAnswer: "C" },
+    { question: "The part of issued share capital that the company has asked the subscribers to pay for is", optionA: "authorized capital.", optionB: "called-up capital.", optionC: "nominal capital.", optionD: "paid-up capital.", correctAnswer: "B" },
+    { question: "The last link in a channel of distribution is the", optionA: "wholesaler.", optionB: "retailer.", optionC: "consumer.", optionD: "agent.", correctAnswer: "C" },
+    { question: "The difference between a country's imports and exports of goods in a particular year is", optionA: "terms of trade.", optionB: "terms of payment.", optionC: "balance of payment.", optionD: "balance of trade.", correctAnswer: "D" },
+    { question: "Goods brought into the country for sale are the country's", optionA: "invisible imports.", optionB: "invisible exports.", optionC: "visible imports.", optionD: "visible exports.", correctAnswer: "C" },
+    { question: "A feature of supermarkets which distinguishes it from other large scale retail outlets is that items sold are", optionA: "mainly household goods.", optionB: "mainly industrial goods.", optionC: "delivered by post.", optionD: "one line of products.", correctAnswer: "A" },
+    { question: "One advantage of small scale retail outlet is", optionA: "availability of self service facilities.", optionB: "ability to buy in bulk.", optionC: "easy access to large amount of capital.", optionD: "personal attention to customers.", correctAnswer: "D" },
+    { question: "A discount deducted from the invoice price of goods to enable the retailer to make profit is", optionA: "cash discount.", optionB: "functional discount.", optionC: "trade discount.", optionD: "seasonal discount.", correctAnswer: "C" },
+    { question: "A document issued by the seller's own courier and signed by the customer to acknowledge receipt of the goods is", optionA: "advice note.", optionB: "consignment note.", optionC: "delivery note.", optionD: "freight note.", correctAnswer: "C" },
+    { question: "A request for goods from another country by an importer would be made using", optionA: "an invoice.", optionB: "an indent.", optionC: "an order.", optionD: "a quotation.", correctAnswer: "B" },
+    { question: "The right to buy or sell stock in the stock exchange within a stipulated period is", optionA: "option.", optionB: "contango.", optionC: "backwardation.", optionD: "brokerage.", correctAnswer: "A" },
+    { question: "The share value stated on a share certificate is", optionA: "above par value.", optionB: "below par value.", optionC: "market value.", optionD: "nominal value.", correctAnswer: "D" },
+    { question: "The bank which acts as the lender of last resort is the", optionA: "Central bank.", optionB: "Commercial bank.", optionC: "Merchant bank.", optionD: "Mortgage bank.", correctAnswer: "A" },
+    { question: "The issue of shares which allows existing shareholder's to buy shares at a preferential price is", optionA: "bonus issue.", optionB: "offer for sale.", optionC: "public offer.", optionD: "rights issue.", correctAnswer: "D" },
+    { question: "The financial market where existing shares and bonds are bought and sold is the", optionA: "forex market.", optionB: "stock market.", optionC: "money market.", optionD: "commodity market.", correctAnswer: "B" },
+    { question: "An insurance policy which is not a contract of indemnity is", optionA: "burglary insurance.", optionB: "fire insurance.", optionC: "life insurance.", optionD: "motor insurance.", correctAnswer: "C" },
+    { question: "When a company insures the lives of all its employees collectively, the policy is", optionA: "accident insurance.", optionB: "fleet insurance.", optionC: "fidelity guarantee insurance.", optionD: "group insurance.", correctAnswer: "D" },
+    { question: "A cheque that could be cashed over the counter by the payee is", optionA: "certified cheque.", optionB: "crossed cheque.", optionC: "open cheque.", optionD: "bank draft.", correctAnswer: "C" },
+    { question: "A specially-designed mode of transport for conveying liquid and gas is a", optionA: "coaster.", optionB: "tanker.", optionC: "liner.", optionD: "ferry.", correctAnswer: "B" },
+    { question: "The safe keeping of goods produced until they are needed is", optionA: "hoarding.", optionB: "marking.", optionC: "packaging.", optionD: "warehousing.", correctAnswer: "D" },
+    { question: "One of the objectives of the Niger Basin Commission is to", optionA: "regulate the movement of citizens across the borders.", optionB: "impose tariff and quota on non-members.", optionC: "regulate the movement of cargo along the river.", optionD: "streamline the construction of dams on the river.", correctAnswer: "D" },
+    { question: "A paid presentation about a product with a view to encouraging purchases by an identifiable sponsor is", optionA: "publicity.", optionB: "personal selling.", optionC: "sales promotion.", optionD: "advertisement.", correctAnswer: "D" },
+    { question: "The face-to-face meeting of the seller with the buyer for the purpose of making sales is", optionA: "mass selling.", optionB: "impulse buying.", optionC: "personal selling.", optionD: "sales promotion.", correctAnswer: "C" },
+    { question: "The activity which improves the appearance of a product and also aimed at protecting it is", optionA: "advertising.", optionB: "grading.", optionC: "labelling.", optionD: "packaging.", correctAnswer: "D" },
+    { question: "Which of the following is not a component of the marketing mix?", optionA: "Product.", optionB: "Production.", optionC: "Promotion.", optionD: "Place.", correctAnswer: "B" },
+    { question: "The marketing term which regards the consumer as king that must be satisfied is", optionA: "market segmentation.", optionB: "market research.", optionC: "marketing concept.", optionD: "marketing mix.", correctAnswer: "C" },
+    { question: "An agreement that is enforceable in law is", optionA: "an offer.", optionB: "a consideration.", optionC: "a contract.", optionD: "an acceptance.", correctAnswer: "C" },
+    { question: "A contract will not be discharged through", optionA: "acceptance.", optionB: "agreement.", optionC: "breach.", optionD: "performance.", correctAnswer: "A" },
+    { question: "A person engaged for the purpose of bringing his principal and a third party into a contractual relation is", optionA: "an arbiter.", optionB: "an auctioneer.", optionC: "an agent.", optionD: "middlemen.", correctAnswer: "C" },
+    { question: "The additional commission paid to agents for guaranteeing payment is", optionA: "brokerage.", optionB: "del credere.", optionC: "drawback.", optionD: "demurrage.", correctAnswer: "B" },
+    { question: "The transfer of ownership of a business from government to the public is", optionA: "commercialization.", optionB: "deregulation.", optionC: "privatization.", optionD: "merger.", correctAnswer: "C" },
+    { question: "One of the disadvantages of privatization is that it", optionA: "promotes inefficiency of staff.", optionB: "brings about economic decline.", optionC: "reduces government revenue.", optionD: "causes increase in the prices of products.", correctAnswer: "D" },
+    { question: "The management function which involves measuring outcomes and taking corrective action to reduce error is", optionA: "staffing.", optionB: "organizing.", optionC: "directing.", optionD: "controlling.", correctAnswer: "D" },
+    { question: "In delegation of authority, the subordinate officer is", optionA: "accountable to his immediate superior.", optionB: "responsible for his superiors actions.", optionC: "only answerable to top management.", optionD: "expected to replace his superior.", correctAnswer: "A" },
+    { question: "A medium of inter-departmental communication is", optionA: "intercom.", optionB: "notice board.", optionC: "radiophone.", optionD: "circular.", correctAnswer: "D" },
+    { question: "Which of the following is not an objective of ECOWAS?", optionA: "Promotion of a common language", optionB: "Improvement of infrastructural facilities", optionC: "Encouragement of free movement of people", optionD: "Encouragement of trade among member counties", correctAnswer: "A" },
+  ];
+
+  if (commerceSubject.length > 0) {
+    for (const q of commerceQuestions) {
+      await db.insert(questions).values({
+        subjectId: commerceSubject[0].id,
+        ...q,
+      });
+    }
+    console.log(`Inserted ${commerceQuestions.length} Commerce questions`);
+  }
+
+  console.log('Seeding completed successfully!');
+  process.exit(0);
+}
+
+seedNewSubjects().catch((error) => {
+  console.error('Error seeding new subjects:', error);
+  process.exit(1);
+});

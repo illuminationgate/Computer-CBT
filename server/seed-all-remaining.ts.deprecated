@@ -1,0 +1,142 @@
+import { db } from './db';
+import { subjects, questions } from '../shared/schema';
+import { eq } from 'drizzle-orm';
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+async function getSubject(name: string) {
+  const [subj] = await db.select().from(subjects).where(eq(subjects.name, name));
+  if (!subj) {
+    throw new Error(`Subject "${name}" not found in database. Please ensure subjects are created before running this seed.`);
+  }
+  return subj;
+}
+
+function validateQuestion(q: any[], hasE: boolean): boolean {
+  const expectedLength = hasE ? 7 : 6;
+  if (!Array.isArray(q) || q.length !== expectedLength) {
+    console.error(`Invalid question array length. Expected ${expectedLength}, got ${q?.length}`);
+    return false;
+  }
+  
+  const correctIndex = hasE ? 6 : 5;
+  const correctAnswer = q[correctIndex];
+  const validOptions = hasE ? ['A', 'B', 'C', 'D', 'E'] : ['A', 'B', 'C', 'D'];
+  
+  if (!validOptions.includes(correctAnswer)) {
+    console.error(`Invalid correct answer: ${correctAnswer}. Must be one of ${validOptions.join(', ')}`);
+    return false;
+  }
+  
+  // Check that all text fields are non-empty
+  for (let i = 0; i < correctIndex; i++) {
+    if (!q[i] || typeof q[i] !== 'string' || q[i].trim().length === 0) {
+      console.error(`Empty or invalid text at index ${i}`);
+      return false;
+    }
+  }
+  
+  return true;
+}
+
+async function insertQs(subjectId: string, qs: any[], hasE: boolean = false) {
+  let num = 1;
+  let inserted = 0;
+  let skipped = 0;
+  
+  for (const q of qs) {
+    if (!validateQuestion(q, hasE)) {
+      console.error(`Skipping invalid question ${num}`);
+      num++;
+      skipped++;
+      continue;
+    }
+    
+    try {
+      const result = await db.insert(questions).values({
+        subjectId,
+        questionNumber: num,
+        questionText: q[0],
+        optionA: q[1],
+        optionB: q[2],
+        optionC: q[3],
+        optionD: q[4],
+        optionE: hasE ? q[5] : null,
+        correctOption: hasE ? q[6] : q[5]
+      }).onConflictDoNothing().returning();
+      
+      // If returning() gives us a row, it was inserted; otherwise it was skipped due to conflict
+      if (result && result.length > 0) {
+        inserted++;
+      } else {
+        skipped++;
+      }
+    } catch (error) {
+      console.error(`Error inserting question ${num}:`, error);
+      skipped++;
+    }
+    num++;
+  }
+  
+  console.log(`   Inserted: ${inserted}, Skipped: ${skipped} (already exist or invalid)`);
+}
+
+async function seed() {
+  console.log('\n🌱 Seeding remaining 6 subjects with 310 questions...\n');
+  
+  try {
+    // ECONOMICS - 50 questions
+    console.log('📊 Economics...');
+    const econ = await getSubject('Economics');
+    const econQs = JSON.parse(readFileSync(join(__dirname, 'seed-economics.json'), 'utf-8'));
+    await insertQs(econ.id, econQs);
+    console.log(`   ✅ ${econQs.length} questions\n`);
+
+    // FINANCIAL ACCOUNTING - 60 questions (5 options)
+    console.log('💰 Financial Accounting...');
+    const fin = await getSubject('Financial Accounting');
+    const finQs = JSON.parse(readFileSync(join(__dirname, 'seed-financial-accounting.json'), 'utf-8'));
+    await insertQs(fin.id, finQs, true); // has option E
+    console.log(`   ✅ ${finQs.length} questions\n`);
+
+    // GOVERNMENT - 50 questions
+    console.log('🏛️  Government...');
+    const gov = await getSubject('Government');
+    const govQs = JSON.parse(readFileSync(join(__dirname, 'seed-government.json'), 'utf-8'));
+    await insertQs(gov.id, govQs);
+    console.log(`   ✅ ${govQs.length} questions\n`);
+
+    // ISLAMIC STUDIES - 50 questions
+    console.log('🕌 Islamic Studies...');
+    const islam = await getSubject('Islamic Studies');
+    const islamQs = JSON.parse(readFileSync(join(__dirname, 'seed-islamic-studies.json'), 'utf-8'));
+    await insertQs(islam.id, islamQs);
+    console.log(`   ✅ ${islamQs.length} questions\n`);
+
+    // MATHEMATICS - 50 questions
+    console.log('📐 Mathematics...');
+    const math = await getSubject('Mathematics');
+    const mathQs = JSON.parse(readFileSync(join(__dirname, 'seed-mathematics.json'), 'utf-8'));
+    await insertQs(math.id, mathQs);
+    console.log(`   ✅ ${mathQs.length} questions\n`);
+
+    // PHYSICS - 50 questions
+    console.log('⚛️  Physics...');
+    const phys = await getSubject('Physics');
+    const physQs = JSON.parse(readFileSync(join(__dirname, 'seed-physics.json'), 'utf-8'));
+    await insertQs(phys.id, physQs);
+    console.log(`   ✅ ${physQs.length} questions\n`);
+
+    console.log('\n✅✅ All subjects seeded successfully!\n');
+    process.exit(0);
+  } catch (e) {
+    console.error('❌ Error:', e);
+    process.exit(1);
+  }
+}
+
+seed();

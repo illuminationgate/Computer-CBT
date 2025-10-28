@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, timestamp, boolean, uniqueIndex } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -32,7 +32,10 @@ export const questions = pgTable("questions", {
   optionD: text("option_d").notNull(),
   optionE: text("option_e"), // Optional 5th option for questions that have it
   correctOption: varchar("correct_option", { length: 1 }).notNull(), // A, B, C, D, or E
-});
+}, (table) => ({
+  // Unique index to prevent duplicate questions per subject
+  uniqueSubjectQuestion: uniqueIndex("questions_subject_id_question_number_idx").on(table.subjectId, table.questionNumber),
+}));
 
 // Exam Sessions table - tracks individual exam attempts
 export const examSessions = pgTable("exam_sessions", {

@@ -1,0 +1,98 @@
+import { db } from './db';
+import { subjects, questions } from '../shared/schema';
+import { eq } from 'drizzle-orm';
+
+// Helper to get or create subject
+async function getOrCreateSubject(name: string, duration: number, questionCount: number) {
+  const existing = await db.select().from(subjects).where(eq(subjects.name, name));
+  
+  if (existing.length === 0) {
+    const result = await db.insert(subjects).values({ name, duration, questionCount }).returning();
+    console.log(`Created subject: ${name}`);
+    return result[0];
+  }
+  console.log(`Subject already exists: ${name}`);
+  return existing[0];
+}
+
+async function seedAll8Subjects() {
+  console.log('Starting to seed 8 new subjects...');
+
+  try {
+    // COMMERCE - 50 questions
+    const commerce = await getOrCreateSubject('Commerce', 60, 50);
+    const commerceQs = [
+      ["Commerce is defined as", "buying and selling of goods and services only.", "all activities in the distribution and exchange of goods and services.", "all activities involved in the production of goods and services.", "transporting and warehousing of goods only.", "B"],
+      ["The types of occupation that a broker belongs to is", "commercial.", "construction.", "extraction.", "manufacturing.", "A"],
+      ["A form of money which was not used in the early days to trade is", "tobacco.", "metal bars.", "cowries.", "coins.", "D"],
+      ["Which of the following activities is not an example of the extractive industry?", "Weaving.", "Quarrying.", "Hunting.", "Fishing.", "A"],
+      ["The factor of production which bear all the risk of the business is", "capital.", "entrepreneurship.", "labour.", "land.", "B"],
+      ["Production is completed when product reach the", "warehouses.", "users.", "retailers.", "shops.", "B"],
+      ["A partner whose name is used to boost the image of the business and does not contribute capital is a", "dormant partner.", "general partner.", "limited partner.", "nominal partner.", "D"],
+      ["One advantage of sole proprietorship is that", "access to large capital is easy.", "decisions are made promptly.", "business risks are spread.", "continuity of business is assured.", "B"],
+      ["A business unit in which savings of members are lent to others is a", "consumer cooperative society.", "producer cooperative society.", "credit and thrift society.", "wholesale cooperative society.", "C"],
+      ["The document issued to a public company allowing it to commence business is the", "Article of Association.", "Certificate of Incorporation.", "Memorandum of Association.", "Certificate of Trading.", "D"],
+      ["Which of the following is not a function of a consumer association?", "Ensuring that consumers buy quality goods", "Educating consumers on their rights", "Penalizing importers of fake goods", "Ensuring that fair prices are charged", "C"],
+      ["An association formed by computer distributors to safeguard and promote their interest is a", "chamber of commerce.", "cooperative society.", "trade association.", "trade union.", "C"],
+      ["The issue of prospectus by a company is an invitation to members of the public to", "subscribe to the company's shares.", "attend the company's Annual General Meeting.", "buy the company's product.", "attend the company's boards meeting.", "A"],
+      ["Examples of current assets are", "cash and trade debtors.", "cash and trade creditors.", "trade debtors, trade creditors and cash.", "trade creditors and trade debtors.", "A"],
+      ["When the cost of sales is divided by the average stock, the result is", "gross profit.", "net profit.", "rate of turnover.", "working capital.", "C"],
+      ["The part of issued share capital that the company has asked the subscribers to pay for is", "authorized capital.", "called-up capital.", "nominal capital.", "paid-up capital.", "B"],
+      ["The last link in a channel of distribution is the", "wholesaler.", "retailer.", "consumer.", "agent.", "C"],
+      ["The difference between a country's imports and exports of goods in a particular year is", "terms of trade.", "terms of payment.", "balance of payment.", "balance of trade.", "D"],
+      ["Goods brought into the country for sale are the country's", "invisible imports.", "invisible exports.", "visible imports.", "visible exports.", "C"],
+      ["A feature of supermarkets which distinguishes it from other large scale retail outlets is that items sold are", "mainly household goods.", "mainly industrial goods.", "delivered by post.", "one line of products.", "A"],
+      ["One advantage of small scale retail outlet is", "availability of self service facilities.", "ability to buy in bulk.", "easy access to large amount of capital.", "personal attention to customers.", "D"],
+      ["A discount deducted from the invoice price of goods to enable the retailer to make profit is", "cash discount.", "functional discount.", "trade discount.", "seasonal discount.", "C"],
+      ["A document issued by the seller's own courier and signed by the customer to acknowledge receipt of the goods is", "advice note.", "consignment note.", "delivery note.", "freight note.", "C"],
+      ["A request for goods from another country by an importer would be made using", "an invoice.", "an indent.", "an order.", "a quotation.", "B"],
+      ["The right to buy or sell stock in the stock exchange within a stipulated period is", "option.", "contango.", "backwardation.", "brokerage.", "A"],
+      ["The share value stated on a share certificate is", "above par value.", "below par value.", "market value.", "nominal value.", "D"],
+      ["The bank which acts as the lender of last resort is the", "Central bank.", "Commercial bank.", "Merchant bank.", "Mortgage bank.", "A"],
+      ["The issue of shares which allows existing shareholder's to buy shares at a preferential price is", "bonus issue.", "offer for sale.", "public offer.", "rights issue.", "D"],
+      ["The financial market where existing shares and bonds are bought and sold is the", "forex market.", "stock market.", "money market.", "commodity market.", "B"],
+      ["An insurance policy which is not a contract of indemnity is", "burglary insurance.", "fire insurance.", "life insurance.", "motor insurance.", "C"],
+      ["When a company insures the lives of all its employees collectively, the policy is", "accident insurance.", "fleet insurance.", "fidelity guarantee insurance.", "group insurance.", "D"],
+      ["A cheque that could be cashed over the counter by the payee is", "certified cheque.", "crossed cheque.", "open cheque.", "bank draft.", "C"],
+      ["A specially-designed mode of transport for conveying liquid and gas is a", "coaster.", "tanker.", "liner.", "ferry.", "B"],
+      ["The safe keeping of goods produced until they are needed is", "hoarding.", "marking.", "packaging.", "warehousing.", "D"],
+      ["One of the objectives of the Niger Basin Commission is to", "regulate the movement of citizens across the borders.", "impose tariff and quota on non-members.", "regulate the movement of cargo along the river.", "streamline the construction of dams on the river.", "D"],
+      ["A paid presentation about a product with a view to encouraging purchases by an identifiable sponsor is", "publicity.", "personal selling.", "sales promotion.", "advertisement.", "D"],
+      ["The face-to-face meeting of the seller with the buyer for the purpose of making sales is", "mass selling.", "impulse buying.", "personal selling.", "sales promotion.", "C"],
+      ["The activity which improves the appearance of a product and also aimed at protecting it is", "advertising.", "grading.", "labelling.", "packaging.", "D"],
+      ["Which of the following is not a component of the marketing mix?", "Product.", "Production.", "Promotion.", "Place.", "B"],
+      ["The marketing term which regards the consumer as king that must be satisfied is", "market segmentation.", "market research.", "marketing concept.", "marketing mix.", "C"],
+      ["An agreement that is enforceable in law is", "an offer.", "a consideration.", "a contract.", "an acceptance.", "C"],
+      ["A contract will not be discharged through", "acceptance.", "agreement.", "breach.", "performance.", "A"],
+      ["A person engaged for the purpose of bringing his principal and a third party into a contractual relation is", "an arbiter.", "an auctioneer.", "an agent.", "middlemen.", "C"],
+      ["The additional commission paid to agents for guaranteeing payment is", "brokerage.", "del credere.", "drawback.", "demurrage.", "B"],
+      ["The transfer of ownership of a business from government to the public is", "commercialization.", "deregulation.", "privatization.", "merger.", "C"],
+      ["One of the disadvantages of privatization is that it", "promotes inefficiency of staff.", "brings about economic decline.", "reduces government revenue.", "causes increase in the prices of products.", "D"],
+      ["The management function which involves measuring outcomes and taking corrective action to reduce error is", "staffing.", "organizing.", "directing.", "controlling.", "D"],
+      ["In delegation of authority, the subordinate officer is", "accountable to his immediate superior.", "responsible for his superiors actions.", "only answerable to top management.", "expected to replace his superior.", "A"],
+      ["A medium of inter-departmental communication is", "intercom.", "notice board.", "radiophone.", "circular.", "D"],
+      ["Which of the following is not an objective of ECOWAS?", "Promotion of a common language", "Improvement of infrastructural facilities", "Encouragement of free movement of people", "Encouragement of trade among member counties", "A"]
+    ];
+    
+    for (const [q, a, b, c, d, ans] of commerceQs) {
+      await db.insert(questions).values({
+        subjectId: commerce.id,
+        question: q as string,
+        optionA: a as string,
+        optionB: b as string,
+        optionC: c as string,
+        optionD: d as string,
+        correctAnswer: ans as string
+      });
+    }
+    console.log(`Inserted ${commerceQs.length} Commerce questions`);
+    
+    console.log('\n✅ All 8 subjects seeded successfully!');
+    process.exit(0);
+  } catch (error) {
+    console.error('Error seeding:', error);
+    process.exit(1);
+  }
+}
+
+seedAll8Subjects();

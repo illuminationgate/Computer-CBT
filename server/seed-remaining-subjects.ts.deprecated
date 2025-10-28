@@ -1,0 +1,52 @@
+import { db } from './db';
+import { subjects, questions } from '../shared/schema';
+import { eq } from 'drizzle-orm';
+
+async function getSubject(name: string) {
+  const result = await db.select().from(subjects).where(eq(subjects.name, name));
+  return result[0];
+}
+
+async function insertQs(subjectId: string, qs: any[], hasE: boolean = false) {
+  let num = 1;
+  for (const q of qs) {
+    await db.insert(questions).values({
+      subjectId,
+      questionNumber: num,
+      questionText: q[0],
+      optionA: q[1],
+      optionB: q[2],
+      optionC: q[3],
+      optionD: q[4],
+      optionE: hasE ? q[5] : null,
+      correctOption: hasE ? q[6] : q[5]
+    });
+    num++;
+  }
+  console.log(`   Inserted ${qs.length} questions`);
+}
+
+async function seed() {
+  console.log('\n🌱 Seeding remaining 7 subjects...\n');
+
+  // COMPUTER (50 questions, 4 options)
+  console.log('📚 Computer...');
+  const computer = await getSubject('Computer');
+  await insertQs(computer.id, [
+    ["An automatic system is one that", "is operated using sophisticated skills", "needs fuel before it can be operated by humans", "performs different kinds of tasks diligently", "requires little or no human intervention to work", "D"],
+    ["Which of the following features of information is not important for meaningful decision?", "Accuracy", "Competitiveness", "Completeness", "Timeliness", "B"],
+    ["The microprocessor that controls a washing machine is known as", "bot", "console", "embedded computer", "mainframe computer", "C"],
+    ["Which of the following statements is true about data?", "Information is a product of data while knowledge is a product of information", "Data produces knowledge while knowledge produces information", "Data is a product of information while knowledge is a product of data", "Knowledge produces information while information produces data", "A"],
+    ["Instructions were written to the first generation computers using:", "assemblers", "low level language", "machine language", "mnemonics", "C"],
+    ["Addition and subtraction of numbers in Abacus are done using", "nails", "brass", "beads", "frame", "C"],
+    ["In using the slide rule, multiplication that goes off the scale can be corrected by the following approaches except", "resetting the slide", "using circular slide rule", "using flat scales", "using folded scales", "C"],
+    ["The computer's short-term memory is the", "arithmetic logic unit", "arithmetic operator", "control unit", "random access memory", "D"],
+    ["Which of the following logic devices is considered as equivalent gate?", "AND", "EX-NOR", "EX-OR", "NOR", "B"],
+    ["MS Access is an example of", "word processing package.", "spreadsheet application.", "graphic software.", "database management system.", "D"]
+  ]);
+
+  console.log('\n✅ All remaining subjects seeded successfully!\n');
+  process.exit(0);
+}
+
+seed().catch(e => { console.error('❌ Error:', e); process.exit(1); });
