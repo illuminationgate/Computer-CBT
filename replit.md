@@ -32,6 +32,7 @@ Preferred communication style: Simple, everyday language.
 - Custom theme provider for persistent dark/light mode preferences
 - Video preloader for branding/loading experience
 - Mobile-responsive design with adaptive UI components
+- **Timer counts UP (elapsed time) instead of counting down** *[Updated: Oct 28, 2025]*
 
 ### Backend Architecture
 
@@ -77,22 +78,23 @@ Preferred communication style: Simple, everyday language.
 - PDF-based question import system for bulk loading exam content
 - JSON-based batch import system for efficient question seeding
 - Idempotent seeding with validation and duplicate prevention
-- 15 predefined subjects matching WAEC/NECO curriculum:
+- 15 predefined subjects matching WAEC/NECO curriculum with accurate durations:
   - **Seeded subjects (13 total, 660 questions = 250 existing + 410 new)**:
-    - Agriculture (50 questions) *[Existing]*
-    - Biology (50 questions) *[Existing]*
-    - Chemistry (50 questions) *[Existing]*
-    - Christian Religious Studies (50 questions) *[Existing]*
-    - Civic Education (50 questions) *[Existing]*
-    - Commerce (50 questions) *[Added: Oct 28, 2025]*
-    - Computer (50 questions) *[Added: Oct 28, 2025]*
-    - Economics (50 questions) *[Added: Oct 28, 2025]*
-    - Financial Accounting (60 questions with 5 options) *[Added: Oct 28, 2025]*
-    - Government (50 questions) *[Added: Oct 28, 2025]*
-    - Islamic Studies (50 questions) *[Added: Oct 28, 2025]*
-    - Mathematics (50 questions) *[Added: Oct 28, 2025]*
-    - Physics (50 questions) *[Added: Oct 28, 2025]*
-  - **Pending subjects**: English, Literature in English
+    - Agriculture (50 questions, 50 min) *[Existing]*
+    - Biology (50 questions, 50 min) *[Existing]*
+    - Chemistry (50 questions, 60 min) *[Existing]*
+    - Christian Religious Studies (50 questions, 60 min) *[Existing]*
+    - Civic Education (50 questions, 60 min) *[Existing]*
+    - Commerce (50 questions, 50 min) *[Added: Oct 28, 2025]*
+    - Computer (50 questions, 60 min) *[Added: Oct 28, 2025]*
+    - Economics (50 questions, 60 min) *[Added: Oct 28, 2025]*
+    - Financial Accounting (60 questions with 5 options, 60 min) *[Added: Oct 28, 2025]*
+    - Government (50 questions, 60 min) *[Added: Oct 28, 2025]*
+    - Islamic Studies (50 questions, 50 min) *[Added: Oct 28, 2025]*
+    - Mathematics (50 questions, 90 min) *[Added: Oct 28, 2025]*
+    - Physics (50 questions, 75 min) *[Added: Oct 28, 2025]*
+  - **Pending subjects**: English (60 min), Literature in English (60 min)
+  - **Durations updated to match WAEC/NECO standards** *[Updated: Oct 28, 2025]*
 
 **Seeding Instructions**:
 1. Run `tsx server/seed-all-new-subjects.ts` to seed all 8 new subjects (410 questions)
