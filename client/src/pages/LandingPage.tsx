@@ -193,7 +193,7 @@ export default function LandingPage() {
 
         <footer className="text-center pt-8">
           <p className="text-sm text-muted-foreground" data-testid="text-contact">
-            Contact: support@computcbt.com
+            Contact: admin@computcbt.com
           </p>
         </footer>
       </div>
