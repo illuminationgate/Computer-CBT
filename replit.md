@@ -43,7 +43,7 @@ Preferred communication style: Simple, everyday language.
 - `/api/start-exam` - Creates student record and exam session
 - `/api/exam-session/:sessionId` - Retrieves exam session details (includes status, startTime, endTime, timeTaken) *[Fixed: Oct 29, 2025]*
 - `/api/exam-session/:sessionId/start` - Starts exam timer and sets session to in_progress
-- `/api/questions/session/:sessionId` - Retrieves shuffled questions for exam session (deterministic shuffle based on session ID) *[Added: Oct 29, 2025]*
+- `/api/questions/session/:sessionId` - Retrieves shuffled questions for exam session (deterministic shuffle based on session ID, renumbered sequentially 1-N) *[Added: Oct 29, 2025]*
 - `/api/results/:sessionId` - Fetches exam results
 
 **Data Access Layer**: 
@@ -55,7 +55,7 @@ Preferred communication style: Simple, everyday language.
 - Error handling middleware for consistent error responses
 - Session-based exam tracking with status management (pending, in_progress, completed, auto_submitted)
 - Separation of student creation and exam session initialization
-- **Deterministic question shuffling per session** - Each student gets questions in randomized order, but same session always returns same shuffle *[Added: Oct 29, 2025]*
+- **Deterministic question shuffling per session** - Each student gets questions in randomized order, but same session always returns same shuffle; questions are renumbered sequentially (1, 2, 3...) after shuffle for consistent display *[Added: Oct 29, 2025]*
 
 ### Data Storage
 

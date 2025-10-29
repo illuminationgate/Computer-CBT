@@ -93,7 +93,13 @@ export function registerRoutes(app: Express): Express {
       const { shuffleArray } = await import("./utils/shuffle");
       const shuffledQuestions = shuffleArray(questionsWithoutAnswers, sessionId);
       
-      res.json(shuffledQuestions);
+      // Renumber questions sequentially (1, 2, 3...) after shuffle
+      const renumberedQuestions = shuffledQuestions.map((q, index) => ({
+        ...q,
+        questionNumber: index + 1
+      }));
+      
+      res.json(renumberedQuestions);
     } catch (error: any) {
       console.error("Error fetching questions:", error);
       res.status(500).json({ message: "Failed to fetch questions" });
