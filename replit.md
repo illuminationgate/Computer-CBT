@@ -40,7 +40,8 @@ Preferred communication style: Simple, everyday language.
 
 **API Design**: RESTful API with the following core endpoints:
 - `/api/start-exam` - Creates student record and exam session
-- `/api/exam-session/:sessionId` - Retrieves exam session details
+- `/api/exam-session/:sessionId` - Retrieves exam session details (includes status, startTime, endTime, timeTaken) *[Fixed: Oct 29, 2025]*
+- `/api/exam-session/:sessionId/start` - Starts exam timer and sets session to in_progress
 - `/api/results/:sessionId` - Fetches exam results
 
 **Data Access Layer**: 
