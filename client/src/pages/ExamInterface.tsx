@@ -15,6 +15,7 @@ interface Question {
   id: string;
   questionNumber: number;
   questionText: string;
+  instruction?: string | null;
   optionA: string;
   optionB: string;
   optionC: string;
@@ -366,6 +367,15 @@ export default function ExamInterface() {
               <Badge variant="secondary" className="mb-2" data-testid="badge-question-number">
                 Question {currentQuestion.questionNumber} of {questions.length}
               </Badge>
+              
+              {/* Display instruction if present */}
+              {currentQuestion.instruction && (
+                <div className="p-4 bg-muted/50 rounded-lg border-l-4 border-primary mb-4" data-testid="text-instruction">
+                  <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap text-muted-foreground italic">
+                    {currentQuestion.instruction}
+                  </p>
+                </div>
+              )}
               
               <h2 className="text-lg md:text-xl leading-relaxed" data-testid="text-question">
                 {currentQuestion.questionText}

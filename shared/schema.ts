@@ -26,6 +26,7 @@ export const questions = pgTable("questions", {
   subjectId: varchar("subject_id").notNull().references(() => subjects.id, { onDelete: "cascade" }),
   questionNumber: integer("question_number").notNull(),
   questionText: text("question_text").notNull(),
+  instruction: text("instruction"), // Optional instruction text for the question
   optionA: text("option_a").notNull(),
   optionB: text("option_b").notNull(),
   optionC: text("option_c").notNull(),
