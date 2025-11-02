@@ -5,9 +5,8 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Timer } from "@/components/Timer";
-import { QuestionPalette, QuestionPaletteDesktop } from "@/components/QuestionPalette";
 import { PreCheckModal } from "@/components/PreCheckModal";
-import { ChevronLeft, ChevronRight, Grid3x3, WifiOff, AlertTriangle } from "lucide-react";
+import { ChevronLeft, ChevronRight, WifiOff, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import logoPath from "@assets/logo_1761650011103.png";
@@ -40,7 +39,6 @@ export default function ExamInterface() {
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Map<string, string>>(new Map());
-  const [showPalette, setShowPalette] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
 
@@ -326,21 +324,9 @@ export default function ExamInterface() {
         {session.startTime && <Timer startTime={session.startTime} duration={session.duration} onTimeUp={handleTimeUp} />}
         
         <div className="flex items-center gap-4">
-          <span className="text-sm font-medium hidden md:inline" data-testid="text-question-counter">
+          <span className="text-sm font-medium" data-testid="text-question-counter">
             Question {currentQuestionIndex + 1} of {questions.length}
           </span>
-          <span className="text-sm font-medium md:hidden" data-testid="text-question-counter-mobile">
-            {currentQuestionIndex + 1}/{questions.length}
-          </span>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setShowPalette(true)}
-            className="md:hidden"
-            data-testid="button-show-palette"
-          >
-            <Grid3x3 className="h-5 w-5" />
-          </Button>
         </div>
       </header>
 
@@ -372,77 +358,63 @@ export default function ExamInterface() {
       )}
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto pb-4">
         <div className="max-w-4xl mx-auto p-4 md:p-6 lg:p-8">
-          <div className="grid md:grid-cols-[1fr,300px] gap-6">
-            {/* Question area */}
-            <div className="space-y-6">
-              {/* Question card */}
-              <Card className="shadow-md">
-                <CardContent className="p-6 md:p-8 space-y-6">
-                  <Badge variant="secondary" className="mb-2" data-testid="badge-question-number">
-                    Question {currentQuestion.questionNumber} of {questions.length}
-                  </Badge>
+          {/* Question card */}
+          <Card className="shadow-md">
+            <CardContent className="p-6 md:p-8 space-y-6">
+              <Badge variant="secondary" className="mb-2" data-testid="badge-question-number">
+                Question {currentQuestion.questionNumber} of {questions.length}
+              </Badge>
+              
+              <h2 className="text-lg md:text-xl leading-relaxed" data-testid="text-question">
+                {currentQuestion.questionText}
+              </h2>
+
+              <div className="space-y-4">
+                {["A", "B", "C", "D", "E"].map((option) => {
+                  const optionText = currentQuestion[`option${option}` as keyof Question] as string | null | undefined;
                   
-                  <h2 className="text-lg md:text-xl leading-relaxed" data-testid="text-question">
-                    {currentQuestion.questionText}
-                  </h2>
+                  // Skip option E if it doesn't exist
+                  if (!optionText) return null;
+                  
+                  const isSelected = selectedAnswers.get(currentQuestion.id) === option;
 
-                  <div className="space-y-4">
-                    {["A", "B", "C", "D", "E"].map((option) => {
-                      const optionText = currentQuestion[`option${option}` as keyof Question] as string | null | undefined;
-                      
-                      // Skip option E if it doesn't exist
-                      if (!optionText) return null;
-                      
-                      const isSelected = selectedAnswers.get(currentQuestion.id) === option;
-
-                      return (
-                        <label
-                          key={option}
-                          className={`
-                            flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all
-                            ${isSelected ? "border-primary bg-primary/5" : "border-border bg-card"}
-                            hover:border-primary hover-elevate
-                          `}
-                          data-testid={`option-${option}`}
-                        >
-                          <input
-                            type="radio"
-                            name="answer"
-                            value={option}
-                            checked={isSelected}
-                            onChange={() => handleAnswerSelect(option)}
-                            className="mt-1 w-5 h-5 text-primary focus:ring-primary"
-                          />
-                          <span className="text-base md:text-lg flex-1">
-                            <span className="font-medium mr-2">{option}.</span>
-                            {optionText}
-                          </span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Question palette (desktop) */}
-            <div className="hidden md:block">
-              <QuestionPaletteDesktop
-                totalQuestions={questions.length}
-                currentQuestion={currentQuestionIndex + 1}
-                answeredQuestions={answeredQuestions}
-                onQuestionSelect={handleQuestionSelect}
-              />
-            </div>
-          </div>
+                  return (
+                    <label
+                      key={option}
+                      className={`
+                        flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all
+                        ${isSelected ? "border-primary bg-primary/5" : "border-border bg-card"}
+                        hover:border-primary hover-elevate
+                      `}
+                      data-testid={`option-${option}`}
+                    >
+                      <input
+                        type="radio"
+                        name="answer"
+                        value={option}
+                        checked={isSelected}
+                        onChange={() => handleAnswerSelect(option)}
+                        className="mt-1 w-5 h-5 text-primary focus:ring-primary"
+                      />
+                      <span className="text-base md:text-lg flex-1">
+                        <span className="font-medium mr-2">{option}.</span>
+                        {optionText}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
 
       {/* Navigation Panel Footer */}
       <footer className="sticky bottom-0 z-20 bg-card border-t shadow-lg">
-        <div className="max-w-4xl mx-auto px-4 md:px-6 py-4">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 py-4 space-y-4">
+          {/* Previous/Next Buttons */}
           <div className="flex items-center justify-between gap-4">
             <Button
               variant="outline"
@@ -490,19 +462,43 @@ export default function ExamInterface() {
               </Button>
             )}
           </div>
+
+          {/* Question Navigator Grid */}
+          <div className="border-t pt-4">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-medium text-muted-foreground" data-testid="text-attempted-count">
+                Attempted {answeredQuestions.size}/{questions.length}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-10 md:grid-cols-[repeat(20,minmax(0,1fr))] gap-1.5 md:gap-2" data-testid="question-navigator-grid">
+              {questions.map((q) => {
+                const isAnswered = answeredQuestions.has(q.questionNumber);
+                const isCurrent = q.questionNumber === currentQuestionIndex + 1;
+
+                return (
+                  <button
+                    key={q.id}
+                    onClick={() => handleQuestionSelect(q.questionNumber)}
+                    className={`
+                      h-11 md:h-12 rounded text-xs md:text-sm font-medium transition-all
+                      ${isCurrent ? "border-2 border-primary ring-2 ring-primary ring-offset-1" : "border border-border"}
+                      ${isAnswered ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}
+                      hover-elevate active-elevate-2 focus:outline-none focus:ring-2 focus:ring-primary
+                    `}
+                    aria-label={`Question ${q.questionNumber}${isAnswered ? ' (answered)' : ' (unanswered)'}${isCurrent ? ' (current)' : ''}`}
+                    aria-current={isCurrent ? "true" : undefined}
+                    data-testid={`navigator-question-${q.questionNumber}`}
+                  >
+                    {q.questionNumber}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </footer>
 
-      {/* Question palette (mobile) */}
-      {showPalette && (
-        <QuestionPalette
-          totalQuestions={questions.length}
-          currentQuestion={currentQuestionIndex + 1}
-          answeredQuestions={answeredQuestions}
-          onQuestionSelect={handleQuestionSelect}
-          onClose={() => setShowPalette(false)}
-        />
-      )}
     </div>
   );
 }
