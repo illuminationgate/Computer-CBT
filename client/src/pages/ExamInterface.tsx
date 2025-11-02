@@ -406,98 +406,93 @@ export default function ExamInterface() {
                   );
                 })}
               </div>
+
+              {/* Previous/Next Buttons */}
+              <div className="flex items-center justify-between gap-4 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  onClick={handlePrevious}
+                  disabled={currentQuestionIndex === 0}
+                  className="min-w-32"
+                  data-testid="button-previous"
+                >
+                  <ChevronLeft className="mr-2 h-4 w-4" />
+                  Previous
+                </Button>
+
+                <div className="flex items-center gap-2">
+                  {saveMutation.isPending && (
+                    <Badge variant="secondary" className="text-xs">
+                      Saving...
+                    </Badge>
+                  )}
+                  {!isOnline && (
+                    <Badge variant="secondary" className="text-xs">
+                      Offline
+                    </Badge>
+                  )}
+                </div>
+
+                {currentQuestionIndex === questions.length - 1 ? (
+                  <Button
+                    variant="destructive"
+                    onClick={handleSubmit}
+                    disabled={submitMutation.isPending}
+                    className="min-w-32"
+                    data-testid="button-submit-exam"
+                  >
+                    {submitMutation.isPending ? "Submitting..." : "Submit Exam"}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleNext}
+                    disabled={currentQuestionIndex === questions.length - 1}
+                    className="min-w-32"
+                    data-testid="button-next"
+                  >
+                    Next
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+
+              {/* Question Navigator Grid */}
+              <div className="border-t pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-medium text-muted-foreground" data-testid="text-attempted-count">
+                    Attempted {answeredQuestions.size}/{questions.length}
+                  </p>
+                </div>
+                
+                <div className="grid grid-cols-10 md:grid-cols-[repeat(20,minmax(0,1fr))] gap-1.5 md:gap-2" data-testid="question-navigator-grid">
+                  {questions.map((q) => {
+                    const isAnswered = answeredQuestions.has(q.questionNumber);
+                    const isCurrent = q.questionNumber === currentQuestionIndex + 1;
+
+                    return (
+                      <button
+                        key={q.id}
+                        onClick={() => handleQuestionSelect(q.questionNumber)}
+                        className={`
+                          h-11 md:h-12 rounded text-xs md:text-sm font-medium transition-all
+                          ${isCurrent ? "border-2 border-primary ring-2 ring-primary ring-offset-1" : "border border-border"}
+                          ${isAnswered ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}
+                          hover-elevate active-elevate-2 focus:outline-none focus:ring-2 focus:ring-primary
+                        `}
+                        aria-label={`Question ${q.questionNumber}${isAnswered ? ' (answered)' : ' (unanswered)'}${isCurrent ? ' (current)' : ''}`}
+                        aria-current={isCurrent ? "true" : undefined}
+                        data-testid={`navigator-question-${q.questionNumber}`}
+                      >
+                        {q.questionNumber}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
       </main>
-
-      {/* Navigation Panel Footer */}
-      <footer className="sticky bottom-0 z-20 bg-card border-t shadow-lg">
-        <div className="max-w-4xl mx-auto px-4 md:px-6 py-4 space-y-4">
-          {/* Previous/Next Buttons */}
-          <div className="flex items-center justify-between gap-4">
-            <Button
-              variant="outline"
-              onClick={handlePrevious}
-              disabled={currentQuestionIndex === 0}
-              className="min-w-32"
-              data-testid="button-previous"
-            >
-              <ChevronLeft className="mr-2 h-4 w-4" />
-              Previous
-            </Button>
-
-            <div className="flex items-center gap-2">
-              {saveMutation.isPending && (
-                <Badge variant="secondary" className="text-xs">
-                  Saving...
-                </Badge>
-              )}
-              {!isOnline && (
-                <Badge variant="secondary" className="text-xs">
-                  Offline
-                </Badge>
-              )}
-            </div>
-
-            {currentQuestionIndex === questions.length - 1 ? (
-              <Button
-                variant="destructive"
-                onClick={handleSubmit}
-                disabled={submitMutation.isPending}
-                className="min-w-32"
-                data-testid="button-submit-exam"
-              >
-                {submitMutation.isPending ? "Submitting..." : "Submit Exam"}
-              </Button>
-            ) : (
-              <Button
-                onClick={handleNext}
-                disabled={currentQuestionIndex === questions.length - 1}
-                className="min-w-32"
-                data-testid="button-next"
-              >
-                Next
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </Button>
-            )}
-          </div>
-
-          {/* Question Navigator Grid */}
-          <div className="border-t pt-4">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-sm font-medium text-muted-foreground" data-testid="text-attempted-count">
-                Attempted {answeredQuestions.size}/{questions.length}
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-10 md:grid-cols-[repeat(20,minmax(0,1fr))] gap-1.5 md:gap-2" data-testid="question-navigator-grid">
-              {questions.map((q) => {
-                const isAnswered = answeredQuestions.has(q.questionNumber);
-                const isCurrent = q.questionNumber === currentQuestionIndex + 1;
-
-                return (
-                  <button
-                    key={q.id}
-                    onClick={() => handleQuestionSelect(q.questionNumber)}
-                    className={`
-                      h-11 md:h-12 rounded text-xs md:text-sm font-medium transition-all
-                      ${isCurrent ? "border-2 border-primary ring-2 ring-primary ring-offset-1" : "border border-border"}
-                      ${isAnswered ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}
-                      hover-elevate active-elevate-2 focus:outline-none focus:ring-2 focus:ring-primary
-                    `}
-                    aria-label={`Question ${q.questionNumber}${isAnswered ? ' (answered)' : ' (unanswered)'}${isCurrent ? ' (current)' : ''}`}
-                    aria-current={isCurrent ? "true" : undefined}
-                    data-testid={`navigator-question-${q.questionNumber}`}
-                  >
-                    {q.questionNumber}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </footer>
 
     </div>
   );
