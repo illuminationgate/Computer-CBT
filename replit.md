@@ -58,7 +58,8 @@ Preferred communication style: Simple, everyday language.
 - Session-based exam tracking with status management (pending, in_progress, completed, auto_submitted)
 - Separation of student creation and exam session initialization
 - **Deterministic question shuffling per session** - Each student gets questions in randomized order, but same session always returns same shuffle; questions are renumbered sequentially (1, 2, 3...) after shuffle for consistent display *[Added: Oct 29, 2025]*
-- **English Language questions are NOT shuffled** - Special handling to preserve question order for English subject as questions are grouped by type (opposite meanings, word completion, interpretations, etc.) *[Added: Nov 2, 2025]*
+- **English Language and Literature in English questions are NOT shuffled** - Special handling to preserve question order for these subjects as questions are grouped by type or based on passages that must maintain their order *[Updated: Nov 2, 2025]*
+- **Instruction field for passage-based questions** - Questions can include optional instruction text to display passages, poems, or extracts above the question (used in English Language and Literature in English) *[Added: Nov 2, 2025]*
 
 ### Data Storage
 
@@ -69,7 +70,7 @@ Preferred communication style: Simple, everyday language.
 **Schema Design**:
 - `students` - Student registration information (name, gender)
 - `subjects` - Subject configurations (name, duration, question count)
-- `questions` - Question bank with options and correct answers
+- `questions` - Question bank with options, correct answers, and optional instruction field for passage-based questions
 - `examSessions` - Tracks individual exam attempts with timing and scoring
 - `answers` - Stores student responses with auto-save support
 
@@ -86,7 +87,7 @@ Preferred communication style: Simple, everyday language.
 - JSON-based batch import system for efficient question seeding
 - Idempotent seeding with validation and duplicate prevention
 - 15 predefined subjects matching WAEC/NECO curriculum with accurate durations:
-  - **Seeded subjects (14 total, 740 questions)**:
+  - **Seeded subjects (15 total, 790 questions)**:
     - Agriculture (50 questions, 50 min) *[Existing]*
     - Biology (50 questions, 50 min) *[Existing]*
     - Chemistry (50 questions, 60 min) *[Existing]*
@@ -99,9 +100,10 @@ Preferred communication style: Simple, everyday language.
     - Financial Accounting (60 questions with 5 options, 60 min) *[Added: Oct 28, 2025]*
     - Government (50 questions, 60 min) *[Added: Oct 28, 2025]*
     - Islamic Studies (50 questions, 50 min) *[Added: Oct 28, 2025]*
+    - Literature in English (50 questions, 60 min, NOT shuffled, with passage-based questions) *[Added: Nov 2, 2025]*
     - Mathematics (50 questions, 90 min) *[Added: Oct 28, 2025]*
     - Physics (50 questions, 75 min) *[Added: Oct 28, 2025]*
-  - **Pending subjects**: Literature in English (60 min)
+  - **All subjects fully seeded!** *[Completed: Nov 2, 2025]*
   - **Durations updated to match WAEC/NECO standards** *[Updated: Oct 28, 2025]*
 
 **Seeding Instructions**:
