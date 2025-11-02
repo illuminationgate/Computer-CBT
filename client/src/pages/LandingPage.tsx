@@ -140,13 +140,13 @@ export default function LandingPage() {
                     <FormLabel className="text-sm font-medium">Gender</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-12 text-base hover:bg-sky-100 dark:hover:bg-sky-900/30 transition-colors" data-testid="select-gender">
+                        <SelectTrigger className="h-12 text-base border-[#1fe2ff] focus:ring-[#1fe2ff] transition-colors" data-testid="select-gender">
                           <SelectValue placeholder="Select gender" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Male" className="hover:bg-sky-100 dark:hover:bg-sky-900/30 cursor-pointer">Male</SelectItem>
-                        <SelectItem value="Female" className="hover:bg-sky-100 dark:hover:bg-sky-900/30 cursor-pointer">Female</SelectItem>
+                      <SelectContent className="border-[#1fe2ff]">
+                        <SelectItem value="Male" className="data-[highlighted]:bg-[#1fe2ff] data-[highlighted]:text-white data-[state=checked]:bg-[#1fe2ff] data-[state=checked]:text-white cursor-pointer">Male</SelectItem>
+                        <SelectItem value="Female" className="data-[highlighted]:bg-[#1fe2ff] data-[highlighted]:text-white data-[state=checked]:bg-[#1fe2ff] data-[state=checked]:text-white cursor-pointer">Female</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -162,13 +162,13 @@ export default function LandingPage() {
                     <FormLabel className="text-sm font-medium">Subject</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-12 text-base hover:bg-sky-100 dark:hover:bg-sky-900/30 transition-colors" data-testid="select-subject">
+                        <SelectTrigger className="h-12 text-base border-[#1fe2ff] focus:ring-[#1fe2ff] transition-colors" data-testid="select-subject">
                           <SelectValue placeholder="Choose your subject" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="border-[#1fe2ff]">
                         {subjects.map((subject) => (
-                          <SelectItem key={subject} value={subject} className="hover:bg-sky-100 dark:hover:bg-sky-900/30 cursor-pointer">
+                          <SelectItem key={subject} value={subject} className="data-[highlighted]:bg-[#1fe2ff] data-[highlighted]:text-white data-[state=checked]:bg-[#1fe2ff] data-[state=checked]:text-white cursor-pointer">
                             {subject}
                           </SelectItem>
                         ))}
