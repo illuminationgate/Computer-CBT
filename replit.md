@@ -58,6 +58,7 @@ Preferred communication style: Simple, everyday language.
 - Session-based exam tracking with status management (pending, in_progress, completed, auto_submitted)
 - Separation of student creation and exam session initialization
 - **Deterministic question shuffling per session** - Each student gets questions in randomized order, but same session always returns same shuffle; questions are renumbered sequentially (1, 2, 3...) after shuffle for consistent display *[Added: Oct 29, 2025]*
+- **English Language questions are NOT shuffled** - Special handling to preserve question order for English subject as questions are grouped by type (opposite meanings, word completion, interpretations, etc.) *[Added: Nov 2, 2025]*
 
 ### Data Storage
 
@@ -85,7 +86,7 @@ Preferred communication style: Simple, everyday language.
 - JSON-based batch import system for efficient question seeding
 - Idempotent seeding with validation and duplicate prevention
 - 15 predefined subjects matching WAEC/NECO curriculum with accurate durations:
-  - **Seeded subjects (13 total, 660 questions = 250 existing + 410 new)**:
+  - **Seeded subjects (14 total, 740 questions)**:
     - Agriculture (50 questions, 50 min) *[Existing]*
     - Biology (50 questions, 50 min) *[Existing]*
     - Chemistry (50 questions, 60 min) *[Existing]*
@@ -94,12 +95,13 @@ Preferred communication style: Simple, everyday language.
     - Commerce (50 questions, 50 min) *[Added: Oct 28, 2025]*
     - Computer (50 questions, 60 min) *[Added: Oct 28, 2025]*
     - Economics (50 questions, 60 min) *[Added: Oct 28, 2025]*
+    - English Language (80 questions, 60 min, NOT shuffled) *[Added: Nov 2, 2025]*
     - Financial Accounting (60 questions with 5 options, 60 min) *[Added: Oct 28, 2025]*
     - Government (50 questions, 60 min) *[Added: Oct 28, 2025]*
     - Islamic Studies (50 questions, 50 min) *[Added: Oct 28, 2025]*
     - Mathematics (50 questions, 90 min) *[Added: Oct 28, 2025]*
     - Physics (50 questions, 75 min) *[Added: Oct 28, 2025]*
-  - **Pending subjects**: English (60 min), Literature in English (60 min)
+  - **Pending subjects**: Literature in English (60 min)
   - **Durations updated to match WAEC/NECO standards** *[Updated: Oct 28, 2025]*
 
 **Seeding Instructions**:

@@ -74,6 +74,7 @@ export function registerRoutes(app: Express): Express {
   });
 
   // Get questions for an exam session (shuffled deterministically based on session ID)
+  // Note: English Language questions are NOT shuffled
   app.get("/api/questions/session/:sessionId", async (req, res) => {
     try {
       const { sessionId } = req.params;
@@ -84,22 +85,33 @@ export function registerRoutes(app: Express): Express {
         return res.status(404).json({ message: "Exam session not found" });
       }
       
+      // Get subject details to check if it's English
+      const [subject] = await db
+        .select()
+        .from(subjects)
+        .where(eq(subjects.id, session.subjectId));
+      
       const allQuestions = await storage.getQuestionsBySubject(session.subjectId);
       
       // Don't send correct answers to frontend
       const questionsWithoutAnswers = allQuestions.map(({ correctOption, ...q }) => q);
       
-      // Shuffle questions deterministically using session ID as seed
-      const { shuffleArray } = await import("./utils/shuffle");
-      const shuffledQuestions = shuffleArray(questionsWithoutAnswers, sessionId);
+      let finalQuestions = questionsWithoutAnswers;
       
-      // Renumber questions sequentially (1, 2, 3...) after shuffle
-      const renumberedQuestions = shuffledQuestions.map((q, index) => ({
-        ...q,
-        questionNumber: index + 1
-      }));
+      // Only shuffle if NOT English Language
+      if (subject?.name !== "English") {
+        const { shuffleArray } = await import("./utils/shuffle");
+        finalQuestions = shuffleArray(questionsWithoutAnswers, sessionId);
+        
+        // Renumber questions sequentially (1, 2, 3...) after shuffle
+        finalQuestions = finalQuestions.map((q, index) => ({
+          ...q,
+          questionNumber: index + 1
+        }));
+      }
+      // For English, questions remain in their original order (no renumbering needed)
       
-      res.json(renumberedQuestions);
+      res.json(finalQuestions);
     } catch (error: any) {
       console.error("Error fetching questions:", error);
       res.status(500).json({ message: "Failed to fetch questions" });
