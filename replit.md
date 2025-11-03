@@ -58,8 +58,8 @@ Preferred communication style: Simple, everyday language.
 - Session-based exam tracking with status management (pending, in_progress, completed, auto_submitted)
 - Separation of student creation and exam session initialization
 - **Deterministic question shuffling per session** - Each student gets questions in randomized order, but same session always returns same shuffle; questions are renumbered sequentially (1, 2, 3...) after shuffle for consistent display *[Added: Oct 29, 2025]*
-- **English Language and Literature in English questions are NOT shuffled** - Special handling to preserve question order for these subjects as questions are grouped by type or based on passages that must maintain their order *[Updated: Nov 2, 2025]*
-- **Instruction field for passage-based questions** - Questions can include optional instruction text to display passages, poems, or extracts above the question (used in English Language and Literature in English) *[Added: Nov 2, 2025]*
+- **English Language, Literature in English, and Financial Accounting questions are NOT shuffled** - Special handling to preserve question order for these subjects as questions are grouped by type or based on passages that must maintain their order *[Updated: Nov 3, 2025]*
+- **Instruction field for passage-based questions** - Questions can include optional instruction text to display passages, poems, or extracts above the question (used in English Language, Literature in English, and Financial Accounting) *[Updated: Nov 3, 2025]*
 
 ### Data Storage
 
@@ -97,7 +97,7 @@ Preferred communication style: Simple, everyday language.
     - Computer (50 questions, 60 min) *[Added: Oct 28, 2025]*
     - Economics (50 questions, 60 min) *[Added: Oct 28, 2025]*
     - English Language (80 questions, 60 min, NOT shuffled) *[Added: Nov 2, 2025]*
-    - Financial Accounting (60 questions with 5 options, 60 min) *[Added: Oct 28, 2025]*
+    - Financial Accounting (60 questions with 5 options, 60 min, NOT shuffled, with passage-based questions) *[Updated: Nov 3, 2025]*
     - Government (50 questions, 60 min) *[Added: Oct 28, 2025]*
     - Islamic Studies (50 questions, 50 min) *[Added: Oct 28, 2025]*
     - Literature in English (50 questions, 60 min, NOT shuffled, with passage-based questions) *[Added: Nov 2, 2025]*
