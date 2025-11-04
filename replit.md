@@ -35,7 +35,7 @@ Preferred communication style: Simple, everyday language.
 - **Timer counts DOWN from exam duration to 00:00** (shows remaining time in descending format) *[Updated: Oct 29, 2025]*
 - **Questions fetched using session ID to receive deterministic shuffle** *[Updated: Oct 29, 2025]*
 - **Question Navigator repositioned to footer with 20-column grid layout on desktop** (shows 3 rows for 50 questions, 10 columns on mobile) *[Updated: Nov 2, 2025]*
-- **Navigation panel at page bottom with Previous/Next buttons above Question Navigator grid** *[Updated: Nov 2, 2025]*
+- **Navigation panel with Previous/Submit/Next buttons above Question Navigator grid** - Submit button always visible between Previous and Next, allowing students to submit exam at any time without navigating to last question *[Updated: Nov 4, 2025]*
 
 ### Backend Architecture
 

@@ -417,20 +417,9 @@ export default function ExamInterface() {
                 })}
               </div>
 
-              {/* Previous/Next Buttons */}
-              <div className="flex items-center justify-between gap-4 pt-4 border-t">
-                <Button
-                  variant="outline"
-                  onClick={handlePrevious}
-                  disabled={currentQuestionIndex === 0}
-                  className="min-w-32"
-                  data-testid="button-previous"
-                >
-                  <ChevronLeft className="mr-2 h-4 w-4" />
-                  Previous
-                </Button>
-
-                <div className="flex items-center gap-2">
+              {/* Previous/Submit/Next Buttons */}
+              <div className="space-y-3 pt-4 border-t">
+                <div className="flex items-center justify-center gap-2">
                   {saveMutation.isPending && (
                     <Badge variant="secondary" className="text-xs">
                       Saving...
@@ -443,27 +432,38 @@ export default function ExamInterface() {
                   )}
                 </div>
 
-                {currentQuestionIndex === questions.length - 1 ? (
+                <div className="flex items-center justify-between gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={handlePrevious}
+                    disabled={currentQuestionIndex === 0}
+                    className="flex-1 min-w-0"
+                    data-testid="button-previous"
+                  >
+                    <ChevronLeft className="mr-2 h-4 w-4" />
+                    Previous
+                  </Button>
+
                   <Button
                     variant="destructive"
                     onClick={handleSubmit}
                     disabled={submitMutation.isPending}
-                    className="min-w-32"
+                    className="flex-1 min-w-0"
                     data-testid="button-submit-exam"
                   >
                     {submitMutation.isPending ? "Submitting..." : "Submit Exam"}
                   </Button>
-                ) : (
+
                   <Button
                     onClick={handleNext}
                     disabled={currentQuestionIndex === questions.length - 1}
-                    className="min-w-32"
+                    className="flex-1 min-w-0"
                     data-testid="button-next"
                   >
                     Next
                     <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
-                )}
+                </div>
               </div>
 
               {/* Question Navigator Grid */}
