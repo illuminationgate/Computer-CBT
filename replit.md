@@ -30,7 +30,7 @@ Preferred communication style: Simple, everyday language.
 - Single-page application architecture to prevent navigation-based data loss
 - Component-based architecture for reusability (Timer, QuestionPalette, PreCheckModal)
 - Custom theme provider for persistent dark/light mode preferences
-- Video preloader for branding/loading experience
+- Video preloader for branding/loading experience (4-second auto-play, skip button removed for consistent brand experience) *[Updated: Nov 4, 2025]*
 - Mobile-responsive design with adaptive UI components
 - **Timer counts DOWN from exam duration to 00:00** (shows remaining time in descending format) *[Updated: Oct 29, 2025]*
 - **Questions fetched using session ID to receive deterministic shuffle** *[Updated: Oct 29, 2025]*
