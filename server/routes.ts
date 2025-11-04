@@ -74,7 +74,7 @@ export function registerRoutes(app: Express): Express {
   });
 
   // Get questions for an exam session (shuffled deterministically based on session ID)
-  // Note: English Language, Literature in English, and Financial Accounting questions are NOT shuffled
+  // Note: English Language, Literature in English, Financial Accounting, and Mathematics questions are NOT shuffled
   app.get("/api/questions/session/:sessionId", async (req, res) => {
     try {
       const { sessionId } = req.params;
@@ -98,8 +98,8 @@ export function registerRoutes(app: Express): Express {
       
       let finalQuestions = questionsWithoutAnswers;
       
-      // Only shuffle if NOT English Language, Literature in English, or Financial Accounting
-      const noShuffleSubjects = ["English", "Literature in English", "Financial Accounting"];
+      // Only shuffle if NOT English Language, Literature in English, Financial Accounting, or Mathematics
+      const noShuffleSubjects = ["English", "Literature in English", "Financial Accounting", "Mathematics"];
       if (!noShuffleSubjects.includes(subject?.name || "")) {
         const { shuffleArray } = await import("./utils/shuffle");
         finalQuestions = shuffleArray(questionsWithoutAnswers, sessionId);
@@ -110,7 +110,7 @@ export function registerRoutes(app: Express): Express {
           questionNumber: index + 1
         }));
       }
-      // For English, Literature in English, and Financial Accounting, questions remain in their original order (no renumbering needed)
+      // For English, Literature in English, Financial Accounting, and Mathematics, questions remain in their original order (no renumbering needed)
       
       res.json(finalQuestions);
     } catch (error: any) {

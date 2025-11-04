@@ -58,7 +58,7 @@ Preferred communication style: Simple, everyday language.
 - Session-based exam tracking with status management (pending, in_progress, completed, auto_submitted)
 - Separation of student creation and exam session initialization
 - **Deterministic question shuffling per session** - Each student gets questions in randomized order, but same session always returns same shuffle; questions are renumbered sequentially (1, 2, 3...) after shuffle for consistent display *[Added: Oct 29, 2025]*
-- **English Language, Literature in English, and Financial Accounting questions are NOT shuffled** - Special handling to preserve question order for these subjects as questions are grouped by type or based on passages that must maintain their order *[Updated: Nov 3, 2025]*
+- **English Language, Literature in English, Financial Accounting, and Mathematics questions are NOT shuffled** - Special handling to preserve question order for these subjects as questions are grouped by type, based on passages, or contain complex mathematical expressions that should maintain their original sequence *[Updated: Nov 4, 2025]*
 - **Instruction field for passage-based questions** - Questions can include optional instruction text to display passages, poems, or extracts above the question (used in English Language, Literature in English, and Financial Accounting) *[Updated: Nov 3, 2025]*
 
 ### Data Storage
@@ -101,7 +101,7 @@ Preferred communication style: Simple, everyday language.
     - Government (50 questions, 60 min) *[Added: Oct 28, 2025]*
     - Islamic Studies (50 questions, 50 min) *[Added: Oct 28, 2025]*
     - Literature in English (50 questions, 60 min, NOT shuffled, with passage-based questions) *[Added: Nov 2, 2025]*
-    - Mathematics (50 questions, 90 min) *[Added: Oct 28, 2025]*
+    - Mathematics (50 questions, 90 min, NOT shuffled, with mathematical expressions preserved) *[Updated: Nov 4, 2025]*
     - Physics (50 questions, 75 min) *[Added: Oct 28, 2025]*
   - **All subjects fully seeded!** *[Completed: Nov 2, 2025]*
   - **Durations updated to match WAEC/NECO standards** *[Updated: Oct 28, 2025]*
