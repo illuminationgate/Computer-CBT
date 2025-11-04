@@ -94,7 +94,7 @@ Preferred communication style: Simple, everyday language.
     - Christian Religious Studies (50 questions, 60 min) *[Existing]*
     - Civic Education (50 questions, 60 min) *[Existing]*
     - Commerce (50 questions, 50 min) *[Added: Oct 28, 2025]*
-    - Computer (50 questions, 60 min) *[Added: Oct 28, 2025]*
+    - Computer Studies (50 questions, 60 min) *[Added: Oct 28, 2025]*
     - Economics (50 questions, 60 min) *[Added: Oct 28, 2025]*
     - English Language (80 questions, 60 min, NOT shuffled) *[Added: Nov 2, 2025]*
     - Financial Accounting (60 questions with 5 options, 60 min, NOT shuffled, with passage-based questions) *[Updated: Nov 3, 2025]*
