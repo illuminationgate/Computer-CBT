@@ -11,6 +11,63 @@ import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import logoPath from "@assets/logo_1761650011103.png";
 
+// Import Mathematics diagram images
+import math21 from "@assets/no 21_1762318183794.png";
+import math23 from "@assets/no 23_1762318183800.png";
+import math30 from "@assets/no 30_1762318183801.png";
+import math31 from "@assets/no 31_1762318183802.png";
+import math33 from "@assets/no 33_1762318183802.png";
+import math35 from "@assets/no 35_1762318183803.png";
+import math38 from "@assets/no 38_1762318183804.png";
+import math45 from "@assets/no 45_1762318183804.png";
+
+// Map image filenames to imported modules
+const imageMap: Record<string, string> = {
+  "no 21_1762318183794.png": math21,
+  "no 23_1762318183800.png": math23,
+  "no 30_1762318183801.png": math30,
+  "no 31_1762318183802.png": math31,
+  "no 33_1762318183802.png": math33,
+  "no 35_1762318183803.png": math35,
+  "no 38_1762318183804.png": math38,
+  "no 45_1762318183804.png": math45,
+};
+
+// Helper component to render instruction with images
+function InstructionRenderer({ instruction }: { instruction: string }) {
+  // Check if instruction contains markdown image syntax
+  const markdownImageRegex = /!\[([^\]]*)\]\(@assets\/([^)]+)\)/g;
+  const match = markdownImageRegex.exec(instruction);
+  
+  if (match) {
+    const altText = match[1];
+    const filename = match[2];
+    const imageSrc = imageMap[filename];
+    
+    if (imageSrc) {
+      return (
+        <div className="p-4 bg-muted/50 rounded-lg border-l-4 border-primary mb-4" data-testid="text-instruction">
+          <img 
+            src={imageSrc} 
+            alt={altText}
+            className="w-full max-w-md mx-auto h-auto rounded-md"
+            data-testid="img-diagram"
+          />
+        </div>
+      );
+    }
+  }
+  
+  // Fallback: render as text if no image found
+  return (
+    <div className="p-4 bg-muted/50 rounded-lg border-l-4 border-primary mb-4" data-testid="text-instruction">
+      <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap text-muted-foreground italic">
+        {instruction}
+      </p>
+    </div>
+  );
+}
+
 interface Question {
   id: string;
   questionNumber: number;
@@ -370,11 +427,7 @@ export default function ExamInterface() {
               
               {/* Display instruction if present */}
               {currentQuestion.instruction && (
-                <div className="p-4 bg-muted/50 rounded-lg border-l-4 border-primary mb-4" data-testid="text-instruction">
-                  <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap text-muted-foreground italic">
-                    {currentQuestion.instruction}
-                  </p>
-                </div>
+                <InstructionRenderer instruction={currentQuestion.instruction} />
               )}
               
               <h2 className="text-lg md:text-xl leading-relaxed" data-testid="text-question">
