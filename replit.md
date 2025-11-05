@@ -102,7 +102,7 @@ Preferred communication style: Simple, everyday language.
     - History (50 questions, 50 min, shuffled) *[Added: Nov 4, 2025]*
     - Islamic Studies (50 questions, 50 min) *[Added: Oct 28, 2025]*
     - Literature in English (50 questions, 60 min, NOT shuffled, with passage-based questions) *[Added: Nov 2, 2025]*
-    - Mathematics (50 questions, 90 min, NOT shuffled, with mathematical expressions preserved) *[Updated: Nov 4, 2025]*
+    - Mathematics (50 questions, 90 min, NOT shuffled, with mathematical expressions and 8 diagram-based questions) *[Completely replaced: Nov 4, 2025]*
     - Physics (50 questions, 75 min) *[Added: Oct 28, 2025]*
   - **All subjects fully seeded!** *[Updated: Nov 4, 2025]*
   - **Durations updated to match WAEC/NECO standards** *[Updated: Oct 28, 2025]*
