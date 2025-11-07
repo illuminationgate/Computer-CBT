@@ -2,7 +2,7 @@
 
 ## Overview
 
-ComputCBT is a professional computer-based testing platform designed for delivering WAEC/NECO-style multiple-choice examinations. The system provides a secure, timed examination environment across 17 subjects with features including offline capability, auto-save functionality, and instant results. The platform emphasizes accessibility, distraction-free testing, and exam integrity through single-session enforcement and tab-switch monitoring.
+ComputCBT is a professional computer-based testing platform designed for delivering WAEC/NECO-style multiple-choice examinations. The system provides a secure, timed examination environment across 18 subjects with features including offline capability, auto-save functionality, and instant results. The platform emphasizes accessibility, distraction-free testing, and exam integrity through single-session enforcement and tab-switch monitoring.
 
 ## User Preferences
 
@@ -58,8 +58,8 @@ Preferred communication style: Simple, everyday language.
 - Session-based exam tracking with status management (pending, in_progress, completed, auto_submitted)
 - Separation of student creation and exam session initialization
 - **Deterministic question shuffling per session** - Each student gets questions in randomized order, but same session always returns same shuffle; questions are renumbered sequentially (1, 2, 3...) after shuffle for consistent display *[Added: Oct 29, 2025]*
-- **English Language, Literature in English, Financial Accounting, Mathematics, and Geography questions are NOT shuffled** - Special handling to preserve question order for these subjects as questions are grouped by type, based on passages, contain complex mathematical expressions, or reference map/climate data that should maintain their original sequence *[Updated: Nov 7, 2025]*
-- **Instruction field for passage-based and image-based questions** - Questions can include optional instruction text to display passages, poems, extracts, or images above the question (used in English Language, Literature in English, Financial Accounting, Mathematics, and Geography) *[Updated: Nov 7, 2025]*
+- **English Language, Literature in English, Financial Accounting, Mathematics, Geography, and Office Practice questions are NOT shuffled** - Special handling to preserve question order for these subjects as questions are grouped by type, based on passages, contain complex mathematical expressions, reference map/climate data, or include diagram-based questions that should maintain their original sequence *[Updated: Nov 7, 2025]*
+- **Instruction field for passage-based and image-based questions** - Questions can include optional instruction text to display passages, poems, extracts, or images above the question (used in English Language, Literature in English, Financial Accounting, Mathematics, Geography, and Office Practice) *[Updated: Nov 7, 2025]*
 - **InstructionRenderer component** - Renders markdown-formatted instructions with embedded images using static imports; supports both text and images displayed together in exam interface *[Added: Nov 7, 2025]*
 
 ### Data Storage
@@ -87,8 +87,8 @@ Preferred communication style: Simple, everyday language.
 - PDF-based question import system for bulk loading exam content
 - JSON-based batch import system for efficient question seeding
 - Idempotent seeding with validation and duplicate prevention
-- 17 predefined subjects matching WAEC/NECO curriculum with accurate durations:
-  - **Seeded subjects (17 total, 890 questions)**:
+- 18 predefined subjects matching WAEC/NECO curriculum with accurate durations:
+  - **Seeded subjects (18 total, 940 questions)**:
     - Agriculture (50 questions, 50 min) *[Existing]*
     - Biology (50 questions, 50 min) *[Existing]*
     - Chemistry (50 questions, 60 min) *[Existing]*
@@ -105,6 +105,7 @@ Preferred communication style: Simple, everyday language.
     - Islamic Studies (50 questions, 50 min) *[Added: Oct 28, 2025]*
     - Literature in English (50 questions, 60 min, NOT shuffled, with passage-based questions) *[Added: Nov 2, 2025]*
     - Mathematics (50 questions, 90 min, NOT shuffled, with mathematical expressions and 8 diagram-based questions) *[Completely replaced: Nov 4, 2025]*
+    - Office Practice (50 questions, 50 min, NOT shuffled, with communication diagram in Q8) *[Added: Nov 7, 2025]*
     - Physics (50 questions, 75 min) *[Added: Oct 28, 2025]*
   - **All subjects fully seeded!** *[Updated: Nov 7, 2025]*
   - **Durations updated to match WAEC/NECO standards** *[Updated: Oct 28, 2025]*
@@ -112,9 +113,10 @@ Preferred communication style: Simple, everyday language.
 **Seeding Instructions**:
 1. Run `tsx server/seed-all-new-subjects.ts` to seed all 8 new subjects (410 questions)
 2. Run `tsx server/seed-geography.ts` to seed Geography (50 questions with map and climate data images)
-3. Seeds are idempotent - can be run multiple times safely (duplicate questions are skipped)
-4. Validation ensures question data integrity (correct array length, valid answers, non-empty text)
-5. Unique constraint on (subject_id, question_number) prevents duplicate questions
+3. Run `tsx server/seed-office-practice.ts` to seed Office Practice (50 questions with communication diagram in Q8)
+4. Seeds are idempotent - can be run multiple times safely (duplicate questions are skipped)
+5. Validation ensures question data integrity (correct array length, valid answers, non-empty text)
+6. Unique constraint on (subject_id, question_number) prevents duplicate questions
 
 ### External Dependencies
 
