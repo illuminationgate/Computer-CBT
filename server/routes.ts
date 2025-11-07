@@ -98,8 +98,8 @@ export function registerRoutes(app: Express): Express {
       
       let finalQuestions = questionsWithoutAnswers;
       
-      // Only shuffle if NOT English Language, Literature in English, Financial Accounting, Mathematics, or Geography
-      const noShuffleSubjects = ["English Language", "Literature in English", "Financial Accounting", "Mathematics", "Geography"];
+      // Only shuffle if NOT English Language, Literature in English, Financial Accounting, Mathematics, Geography, or Office Practice
+      const noShuffleSubjects = ["English Language", "Literature in English", "Financial Accounting", "Mathematics", "Geography", "Office Practice"];
       if (!noShuffleSubjects.includes(subject?.name || "")) {
         const { shuffleArray } = await import("./utils/shuffle");
         finalQuestions = shuffleArray(questionsWithoutAnswers, sessionId);
