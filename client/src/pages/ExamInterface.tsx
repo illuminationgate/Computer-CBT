@@ -25,6 +25,9 @@ import math45 from "@assets/no 45_1762318183804.png";
 import geographyMap from "@assets/IMAGE 1_1762510955138.jpg";
 import geographyClimate from "@assets/IMAGE 2_1762510955140.jpg";
 
+// Import Office Practice communication diagram
+import officePracticeDiagram from "@assets/Screenshot 2025-11-07 155453_1762528141868.png";
+
 // Map image filenames to imported modules
 const imageMap: Record<string, string> = {
   "no 21_1762318183794.png": math21,
@@ -37,6 +40,7 @@ const imageMap: Record<string, string> = {
   "no 45_1762318183804.png": math45,
   "IMAGE 1_1762510955138.jpg": geographyMap,
   "IMAGE 2_1762510955140.jpg": geographyClimate,
+  "Screenshot 2025-11-07 155453_1762528141868.png": officePracticeDiagram,
 };
 
 // Helper component to render instruction with images
