@@ -1,0 +1,129 @@
+Project summary
+Build ComputCBT, a responsive, accessible, and secure browser-based CBT platform that delivers single-subject MCQ exams (WAEC/NECO style). Students land on a single-page form to enter name, select gender, and pick a subject; the selected paper runs with an automatic countdown, autosave, navigation controls, and final scoring. Results show student details, time taken, raw score, and percentage.
+
+Requirements & acceptance criteria
+1. Landing page (Login & Subject selection)
+•	Fields:
+o	Full name (required; 3–100 chars; letters, spaces, hyphens allowed).
+o	Gender (dropdown: Male, Female; required).
+o	Subject (single-select dropdown containing the list below; required).
+•	Footer displays contact email: admin@computcbt.com.ng.
+•	"Start Exam" button launches the exam only if validations pass.
+•	Single attempt per page load / session (refreshing after start should warn about losing progress unless reloaded deliberately).
+•	Use the video file as a pre-loader of about 4 seconds before the landing page will come up.
+2. Subjects, number of questions & durations
+Use this table exactly:
+Subject	Number of questions	Duration (minutes)
+Agricultural Science	50	50
+Biology	50	50
+Chemistry	50	60
+Christian Religious Studies	50	60
+Civic Education	50	60
+Commerce	50	50
+Computer Studies	50	60
+Economics	50	60
+English Language	80	60
+Financial Accounting	60	60
+Government	50	60
+Islamic Religious Studies	50	50
+Literature in English	50	60
+Mathematics	50	90
+Physics	50	75
+•	On the exam start, display a short pre-check modal summarizing subject, # questions, and duration; require user confirmation.
+•	The file that contains all the questions and answer are also uploaded
+3. Exam behavior & UI
+•	One question at a time UI, showing:
+o	Question number / total (e.g., Q 5 / 50).
+o	Question text and up to 5 options (A–E). Options may be fewer.
+o	Radio buttons for single answer selection.
+•	Navigation: Back and Next buttons.
+o	Disabled when at first/last question appropriately.
+o	Clicking Next autosaves current answer and moves forward.
+•	Timer:
+o	Starts as soon as the exam begins (after pre-check confirm).
+o	Visible, persistent countdown in header (HH:MM:SS).
+o	Auto-submit occurs immediately when timer reaches 00:00:00.
+•	Autosave:
+o	Persist answers locally and to server every 10 seconds and on every navigation action.
+o	If network is lost, continue saving locally and sync when connection is restored.
+•	Submit button:
+o	Allows manual submission anytime.
+o	Show a confirmation modal: “Are you sure? This will submit your paper and cannot be undone.” (Yes/Cancel).
+•	Unanswered questions:
+o	Allow users to skip and return later.
+o	Show quick nav (optional collapsed grid or question palette) to jump to any question and to see answered/unanswered states.
+•	Accessibility:
+o	Keyboard accessible (Tab order, Enter to select, arrow keys to navigate radio group).
+o	Screen-reader friendly (aria labels).
+•	Design:
+o	Clean, distraction-free, professional UI.
+o	Responsive across phones, tablets, desktops.
+4. Scoring & result
+•	Scoring rules:
+o	Correct answer = 1 mark
+o	Wrong answer = 0
+o	Unanswered = 0
+•	After submission (manual or auto):
+o	Show Result Page containing:
+	Full Name
+	Gender
+	Subject
+	Time Taken (HH:MM:SS)
+	Score (e.g., 42 / 50)
+	Percentage (rounded to 2 decimal places)
+o	Option to download/print a simple result card (PDF).
+o	Option to review answers with correct answers shown (toggle on/off).
+5. Data & API expectations (minimum)
+•	Question model (JSON) example:
+{
+  "id": "eng_q001",
+  "subject": "English Language",
+  "text": "Choose the correct synonym for 'abundant'.",
+  "options": [
+    {"key":"A","text":"Scarce"},
+    {"key":"B","text":"Plentiful"},
+    {"key":"C","text":"Tiny"},
+    {"key":"D","text":"Brief"}
+  ],
+  "correct": "B"
+}
+•	Client->Server endpoints (suggested):
+o	POST /api/exam/start → create session, return examId, questions (or IDs).
+o	POST /api/exam/{examId}/answer → save answer (payload: questionId, selectedOption, timestamp).
+o	GET /api/exam/{examId}/status → get remaining time, saved answers.
+o	POST /api/exam/{examId}/submit → submit and calculate score.
+o	GET /api/exam/{examId}/result → fetch final result.
+•	Server must validate answers and calculate score on submit (do not trust client-side scoring).
+6. Reliability, security & integrity
+•	Use secure transport (HTTPS).
+•	Protect against tampering:
+o	Do not expose correct in client payloads.
+o	Server-side timer enforcement — ignore client time submissions if inconsistent.
+•	Lock exam session to one active token; prevent multiple simultaneous submits from different tabs.
+•	Rate-limit start/submit endpoints to mitigate abuse.
+•	Basic anti-cheat:
+o	Warn on page/tab switches (optional: log focus changes).
+o	Prevent copy/paste of question text (optional).
+•	Store logs of autosaves and final submission for audit.
+7. Edge-cases & behaviors
+•	Network drop: allow exam to continue offline with local autosave; sync when online. If sync fails at submit, keep local copy and retry automatically.
+•	Browser close/refresh: warn the user that progress is saved (if logged) or may be lost (if no server session); on re-open, try to recover using server session id or local storage.
+•	Time manipulation attempts: server should compute remaining time based on server start timestamp; client timer is only UI.
+8. Testing & QA
+•	Unit tests for scoring logic and API endpoints.
+•	Integration tests for autosave, submit, and offline sync.
+•	Cross-browser responsive tests (Chrome, Firefox, Edge, Safari mobile).
+•	Load test for concurrent exam starts/submits (define expected concurrency in planning).
+9. Deliverables
+•	Production-ready frontend (HTML/CSS/JS or SPA framework) with source code.
+•	Backend API and database schema (sample migrations).
+•	Sample seed data: 2–5 questions per subject for QA, plus scripts to import full question sets.
+•	README with setup/deploy instructions.
+•	Basic test suite and instructions to run it.
+•	Demo deployment (optional): link to a hosted demo or instructions to run locally.
+10. Suggested tech stack (optional)
+•	Frontend: React / Vue / Svelte (SPA), Tailwind CSS for styling.
+•	Backend: Node.js (Express) or Python (FastAPI) or PHP (Laravel).
+•	Database: PostgreSQL or MySQL.
+•	Optional hosting: Vercel/Netlify for frontend + Render/Heroku/DigitalOcean for API; use managed DB.
+•	Use JWT or short-lived session tokens for exam sessions.
