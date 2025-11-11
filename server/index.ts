@@ -57,9 +57,9 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // ✅ Port configuration (use localhost instead of 0.0.0.0)
+  // ✅ Port configuration (use 0.0.0.0 for external access on Render)
   const port = parseInt(process.env.PORT || "5000", 10);
-  const host = process.env.HOST || "127.0.0.1"; // 👈 Fallback to localhost
+  const host = process.env.HOST || "0.0.0.0"; // 👈 Changed to 0.0.0.0 for Render
 
   server.listen(port, host, () => {
     log(`✅ Server running on http://${host}:${port}`);
