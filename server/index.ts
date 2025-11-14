@@ -14,6 +14,8 @@ app.use((req, res, next) => {
   const origin = req.headers.origin;
   const allowedOrigins = [
     "https://computer-cbt.vercel.app",
+    "https://www.computcbt.com.ng",
+    "https://computcbt.com.ng",
     "http://localhost:5173",
     "http://localhost:3000",
   ];
