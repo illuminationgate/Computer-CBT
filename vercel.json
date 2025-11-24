@@ -1,7 +1,9 @@
 {
+  "buildCommand": "cd client && npm run build",
+  "outputDirectory": "client/dist",
   "rewrites": [
     {
-      "source": "/:path((?!sitemap\\.xml|robots\\.txt|.*\\.xml|.*\\.txt|.*\\.png|.*\\.jpg|.*\\.svg).*)",
+      "source": "/:path((?!sitemap\\.xml|robots\\.txt|_next|static|.*\\.json).*)",
       "destination": "/index.html"
     }
   ]
