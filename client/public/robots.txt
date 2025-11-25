@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://computcbt.com.ng/sitemap.xml

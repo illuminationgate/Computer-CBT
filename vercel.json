@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd client && npm run build",
+  "outputDirectory": "dist/public",
+  "rewrites": [
+    {
+      "source": "/:path((?!sitemap\\.xml|robots\\.txt|_next|static|.*\\.json).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

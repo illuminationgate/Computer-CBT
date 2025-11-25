@@ -92,10 +92,16 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-primary/10 flex flex-col items-center justify-center p-4 relative">
+      <header className="absolute top-4 left-4 flex gap-4 text-sm font-medium">
+        <a href="/" className="hover:underline">Home</a>
+        <a href="/about" className="hover:underline">About</a>
+        <a href="/contact" className="hover:underline">Contact</a>
+      </header>
+
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      
+
       <div className="w-full max-w-md mx-auto space-y-6">
         <div className="text-center space-y-4">
           <div className="flex justify-center">
@@ -149,8 +155,8 @@ export default function LandingPage() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Male" className="data-[highlighted]:bg-[#0066cc] data-[highlighted]:text-white data-[state=checked]:bg-[#0066cc] data-[state=checked]:text-white cursor-pointer">Male</SelectItem>
-                        <SelectItem value="Female" className="data-[highlighted]:bg-[#0066cc] data-[highlighted]:text-white data-[state=checked]:bg-[#0066cc] data-[state=checked]:text-white cursor-pointer">Female</SelectItem>
+                        <SelectItem value="Male" className="cursor-pointer">Male</SelectItem>
+                        <SelectItem value="Female" className="cursor-pointer">Female</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -172,7 +178,7 @@ export default function LandingPage() {
                       </FormControl>
                       <SelectContent>
                         {subjects.map((subject) => (
-                          <SelectItem key={subject} value={subject} className="data-[highlighted]:bg-[#0066cc] data-[highlighted]:text-white data-[state=checked]:bg-[#0066cc] data-[state=checked]:text-white cursor-pointer">
+                          <SelectItem key={subject} value={subject} className="cursor-pointer">
                             {subject}
                           </SelectItem>
                         ))}
@@ -195,10 +201,12 @@ export default function LandingPage() {
           </Form>
         </Card>
 
-        <footer className="text-center pt-8">
-          <p className="text-sm text-muted-foreground" data-testid="text-contact">
-            Contact: admin@computcbt.com
-          </p>
+        <footer className="text-center pt-8 text-sm text-muted-foreground">
+          <p>© {new Date().getFullYear()} ComputCBT. All rights reserved.</p>
+          <div className="flex justify-center gap-4 mt-2">
+            <a href="/privacy" className="hover:underline">Privacy Policy</a>
+            <a href="/terms" className="hover:underline">Terms</a>
+          </div>
         </footer>
       </div>
     </div>
